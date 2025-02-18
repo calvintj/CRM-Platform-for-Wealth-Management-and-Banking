@@ -2,6 +2,8 @@ import React from 'react';
 import { NavLink } from 'react-router-dom';
 import Logo from "../assets/persen white.png";
 
+import { RiRobot3Line } from "react-icons/ri";
+
 export default function Sidebar() {
   // Define a common class for the links
   const linkClass = "text-gray-300 hover:text-white flex items-center gap-2 py-2 px-3 rounded-md";
@@ -109,6 +111,15 @@ export default function Sidebar() {
               d="M12 7.5h1.5m-1.5 3h1.5m-7.5 3h7.5m-7.5 3h7.5m3-9h3.375c.621 0 1.125.504 1.125 1.125V18a2.25 2.25 0 0 1-2.25 2.25M16.5 7.5V18a2.25 2.25 0 0 0 2.25 2.25M16.5 7.5V4.875c0-.621-.504-1.125-1.125-1.125H4.125C3.504 3.75 3 4.254 3 4.875V18a2.25 2.25 0 0 0 2.25 2.25h13.5M6 7.5h3v3H6v-3Z"
             />
           </svg>
+        </NavLink>
+
+        <NavLink
+          to="/chatbot"
+          className={({ isActive }) =>
+            `${linkClass} ${isActive ? "bg-gray-700" : ""}`
+          }
+        >
+          <RiRobot3Line />
         </NavLink>
       </nav>
 

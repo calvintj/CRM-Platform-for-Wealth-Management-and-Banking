@@ -4,6 +4,7 @@ import Overview from './pages/OverviewPage.jsx'
 import CustomerDetails from './pages/CustomerDetailsPage.jsx'
 import TaskManager from './pages/TaskManagerPage.jsx'
 import News from './pages/NewsPage.jsx'
+import Chatbot from './pages/Chatbot.jsx'
 
 function App() {
   return (
@@ -14,6 +15,7 @@ function App() {
         <Route path="/customer-details" element={<CustomerDetails />} />
         <Route path="/task-manager" element={<TaskManager />} />
         <Route path="/news" element={<News />} />
+        <Route path="/chatbot" element={<Chatbot />} />
       </Routes>
     </>
   )
