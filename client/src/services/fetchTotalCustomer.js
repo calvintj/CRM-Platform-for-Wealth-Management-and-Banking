@@ -4,7 +4,7 @@ const fetchTotalCustomer = async (customerRisk) => {
     const rm_number = tokenPayload.rm_number;
   
     const response = await fetch(
-      `http://localhost:5001/api/overview/total-customer?customerRisk=${customerRisk}&rm_number=${rm_number}`,
+      `http://localhost:5000/api/overview/total-customer?customerRisk=${customerRisk}&rm_number=${rm_number}`,
       {
         method: "GET",
         headers: {

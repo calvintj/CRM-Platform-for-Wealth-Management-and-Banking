@@ -1,0 +1,38 @@
+version: "3.8"
+
+services:
+  db:
+    image: postgres:13-alpine
+    environment:
+      POSTGRES_USER: calvintj
+      POSTGRES_PASSWORD: 280603
+      POSTGRES_DB: bati_crm_db
+    volumes:
+      - postgres_data:/var/lib/postgresql/data
+    ports:
+      - "5432:5432"
+
+  server:
+    build: ./server
+    volumes:
+      - ./server:/app
+    ports:
+      - "5000:5000"
+    depends_on:
+      - db
+    environment:
+      # Update the connection string to point to the 'db' service
+      - DATABASE_URL=postgres://calvintj:280603@db:5432/bati_crm_db
+
+  client:
+    build: ./client
+    volumes:
+      - ./client:/app
+    ports:
+      # For production build (with Nginx) you might map port 80 instead:
+      - "3000:3000"
+    depends_on:
+      - server
+
+volumes:
+  postgres_data:
