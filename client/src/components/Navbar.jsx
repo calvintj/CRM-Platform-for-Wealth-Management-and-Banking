@@ -5,10 +5,15 @@ export default function Navbar() {
       style={{ backgroundColor: "#1D283A" }}
     >
       {/* Left:  */}
-      <div className="flex items-center"></div>
+      <div
+        className="flex items-center ml-2"
+        style={{ fontSize: "1.2rem", fontWeight: "bold" }}
+      >
+        
+      </div>
 
       {/* Right: Notification, Email, RM */}
-      <div className="flex items-center gap-4">
+      <div className="flex items-center gap-4 mr-2">
         <button className="text-gray-300 hover:text-white">
           <svg
             xmlns="http://www.w3.org/2000/svg"

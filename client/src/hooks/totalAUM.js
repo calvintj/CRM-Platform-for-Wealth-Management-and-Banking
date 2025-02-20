@@ -10,6 +10,10 @@ export function useTotalAUM(customerRisk) {
         const result = await fetchTotalAUM(customerRisk);
         const formattedData = [
           {
+            name: "All",
+            value: result.all || 0,
+          },
+          {
             name: "Conservative",
             value: result.conservative || 0,
           },

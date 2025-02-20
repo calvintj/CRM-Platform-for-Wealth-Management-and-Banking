@@ -1,4 +1,5 @@
 import PropTypes from "prop-types";
+import React from "react";
 
 import {
   PieChart,
@@ -45,8 +46,12 @@ export default function RiskProfilePie({
   customerData,
   setCustomerRisk,
 }) {
-  console.log(customerData);
-  if (customerData.length === 0 || customerData.every((item) => item.value === 0)) {
+  const [selectedIndex, setSelectedIndex] = React.useState(null);
+
+  if (
+    customerData.length === 0 ||
+    customerData.every((item) => item.value === 0)
+  ) {
     return <div className="text-center text-gray-400">No data available</div>;
   }
 
@@ -65,14 +70,20 @@ export default function RiskProfilePie({
         style={{
           textAlign: "center",
           margin: "0 0 1.2rem",
-          fontSize: "1.2rem",
+          fontSize: "1.5rem",
+          fontWeight: "bold",
         }}
       >
         {title}
       </h3>
 
       <ResponsiveContainer width="100%" aspect={1.5}>
-        <PieChart>
+        <PieChart
+          onClick={() => {
+            setSelectedIndex(null);
+            setCustomerRisk({ name: "All" });
+          }}
+        >
           <Pie
             data={customerData}
             cx="50%"
@@ -84,17 +95,25 @@ export default function RiskProfilePie({
             dataKey="value"
             paddingAngle={2}
           >
-            {customerData
-              .map((entry, index) => (
-                <Cell
-                  key={`cell-${index}`}
-                  fill={colors[index % colors.length]}
-                  stroke="none"
-                  onClick={() => {
-                    setCustomerRisk({ name: entry.name, value: entry.value });
-                  }}
-                />
-              ))}
+            {customerData.map((entry, index) => (
+              <Cell
+                key={`cell-${index}`}
+                fill={
+                  selectedIndex === null || selectedIndex === index
+                    ? colors[index % colors.length]
+                    : "#808080"
+                } // Gray color for unselected items
+                stroke="none"
+                opacity={
+                  selectedIndex === null || selectedIndex === index ? 1 : 0.3
+                }
+                onClick={(e) => {
+                  e.stopPropagation();
+                  setCustomerRisk({ name: entry.name, value: entry.value });
+                  setSelectedIndex(index === selectedIndex ? null : index);
+                }}
+              />
+            ))}
           </Pie>
           <Tooltip
             formatter={(value) => `${value} customers`}

@@ -21,7 +21,9 @@ export default function Sidebar() {
     >
       {/* Logo or brand */}
       <div className="mt-4 mb-8 flex items-center">
-        <img src={Logo} alt="Bati Logo" className="w-10 h-10" />
+        <NavLink to="/overview">
+          <img src={Logo} alt="Bati Logo" className="w-10 h-10" />
+        </NavLink>
       </div>
 
       {/* Nav items */}

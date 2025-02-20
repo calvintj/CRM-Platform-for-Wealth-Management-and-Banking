@@ -3,7 +3,6 @@ import { PieChart as RePieChart, Pie, Cell, Label } from "recharts";
 import PropTypes from "prop-types";
 
 export default function GaugeChart({ customerData, customerRisk }) {
-  // const [currentValue, setCurrentValue] = useState(0);
   const currentValue =
     customerRisk?.value || customerData.reduce((sum, item) => sum + item.value, 0);
   const targetValue = 500;
@@ -15,15 +14,15 @@ export default function GaugeChart({ customerData, customerRisk }) {
   ];
 
   // Dimensions for the chart
-  const chartWidth = 400;
-  const chartHeight = 200;
+  const chartWidth = 300;
+  const chartHeight = 150;
 
   // Center x/y
-  const cx = 200; // half of chartWidth
-  const cy = 140; // lower this if you see it's cut off
+  const cx = 150; // half of chartWidth
+  const cy = 105; // lower this if you see it's cut off
 
-  const innerRadius = 100;
-  const outerRadius = 125;
+  const innerRadius = 75;
+  const outerRadius = 95;
 
   return (
     <div className="flex flex-col items-center justify-center">

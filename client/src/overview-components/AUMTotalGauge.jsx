@@ -1,18 +1,16 @@
 // PieChart.js
-import { PieChart as RePieChart, Pie, Cell, Label } from "recharts";
+import { PieChart as RePieChart, Pie, Cell, Label, Tooltip } from "recharts";
 import PropTypes from "prop-types";
 
 export default function GaugeChart({ aumData, customerRisk }) {
   const currentValue = (() => {
-    if (customerRisk === "all") {
-      return aumData.reduce((sum, item) => sum + item.value, 0);
-    } else {
-      const aumValue = aumData.find((item) => item.name === customerRisk.name);
-      return aumValue ? aumValue.value : 0;
-    }
+    const aumValue =
+      customerRisk === "all"
+        ? aumData.find((item) => item.name === "All")
+        : aumData.find((item) => item.name === customerRisk.name);
+    return aumValue ? aumValue.value : 0;
   })();
-
-  const targetValue = 800000000;
+  const targetValue = 1000000000;
 
   // Two slices: "Completed" vs. "Remaining"
   const data = [
@@ -21,20 +19,25 @@ export default function GaugeChart({ aumData, customerRisk }) {
   ];
 
   // Dimensions for the chart
-  const chartWidth = 400;
-  const chartHeight = 200;
+  const chartWidth = 300;
+  const chartHeight = 150;
 
   // Center x/y
-  const cx = 200; // half of chartWidth
-  const cy = 140; // lower this if you see it's cut off
+  const cx = 150; // half of chartWidth
+  const cy = 105; // lower this if you see it's cut off
 
-  const innerRadius = 100;
-  const outerRadius = 125;
+  const innerRadius = 75;
+  const outerRadius = 95;
 
   return (
     <div className="flex flex-col items-center justify-center">
       {/* Title above the chart */}
-      <div className="text-white font-semibold mt-4" style={{ fontSize: "1.5rem" }}>Total AUM</div>
+      <div
+        className="text-white font-semibold mt-4"
+        style={{ fontSize: "1.5rem" }}
+      >
+        Total AUM
+      </div>
 
       <RePieChart width={chartWidth} height={chartHeight}>
         <Pie
@@ -53,7 +56,7 @@ export default function GaugeChart({ aumData, customerRisk }) {
           ))}
           {/* Main value */}
           <Label
-            value={currentValue}
+            value={`Rp ${Math.floor(currentValue / 1000000)}M`}
             position="center"
             dy={-10}
             style={{
@@ -65,7 +68,7 @@ export default function GaugeChart({ aumData, customerRisk }) {
           />
           {/* Target label */}
           <Label
-            value={`Target: ${targetValue}`}
+            value={`Target: Rp ${Math.round(targetValue / 1000000)}M`}
             position="center"
             dy={20}
             style={{
@@ -75,15 +78,31 @@ export default function GaugeChart({ aumData, customerRisk }) {
             }}
           />
         </Pie>
+        <Tooltip
+          formatter={(value) => `Rp ${value.toLocaleString()}`}
+          contentStyle={{
+            background: "white",
+            border: "none",
+            borderRadius: "4px",
+            color: "black",
+          }}
+        />
       </RePieChart>
     </div>
   );
 }
 
 GaugeChart.propTypes = {
-  aumData: PropTypes.shape({
-    reduce: PropTypes.func,
-    find: PropTypes.func,
-  }),
-  customerRisk: PropTypes.string,
+  aumData: PropTypes.arrayOf(
+    PropTypes.shape({
+      name: PropTypes.string,
+      value: PropTypes.number,
+    })
+  ).isRequired,
+  customerRisk: PropTypes.oneOfType([
+    PropTypes.string,
+    PropTypes.shape({
+      name: PropTypes.string,
+    }),
+  ]).isRequired,
 };
