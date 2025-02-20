@@ -1,9 +1,17 @@
 import { PieChart as RePieChart, Pie, Cell, Label } from 'recharts';
+import PropTypes from 'prop-types';
 
-export default function GaugeChart() {
-  // Example values
-  const currentValue = 50;
-  const targetValue = 150;
+export default function GaugeChart({customerRisk, fbiData}) {
+  const currentValue = (() => {
+    if (customerRisk === "all") {
+      return fbiData.reduce((sum, item) => sum + item.value, 0);
+    } 
+    else {
+      const fbiValue = fbiData.find((item) => item.name === customerRisk.name);
+      return fbiValue ? fbiValue.value : 0;
+    }
+  })();
+  const targetValue = 600000;
 
   // Two slices: "Completed" vs. "Remaining"
   const data = [
@@ -12,20 +20,20 @@ export default function GaugeChart() {
   ];
 
   // Dimensions for the chart
-  const chartWidth = 300;
-  const chartHeight = 180;
+  const chartWidth = 400;
+  const chartHeight = 200;
 
   // Center x/y
-  const cx = 150; // half of chartWidth
-  const cy = 130; // lower this if you see it's cut off
+  const cx = 200; // half of chartWidth
+  const cy = 140; // lower this if you see it's cut off
 
-  const innerRadius = 80;
-  const outerRadius = 100;
+  const innerRadius = 100;
+  const outerRadius = 125;
 
   return (
     <div className="flex flex-col items-center justify-center">
       {/* Title above the chart */}
-      <div className="text-white font-semibold mt-4">Total FBI</div>
+      <div className="text-white font-semibold mt-4" style={{ fontSize: "1.5rem" }}>Total FBI</div>
 
       <RePieChart width={chartWidth} height={chartHeight}>
         <Pie
@@ -70,3 +78,10 @@ export default function GaugeChart() {
     </div>
   );
 }
+
+GaugeChart.propTypes = {
+  customerRisk: PropTypes.string,
+  fbiData: PropTypes.array,
+  find: PropTypes.func,
+  reduce: PropTypes.func,
+};

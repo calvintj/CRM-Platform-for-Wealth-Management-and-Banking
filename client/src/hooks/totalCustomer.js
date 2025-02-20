@@ -1,24 +1,22 @@
 import { useState, useEffect } from "react";
 import fetchTotalCustomer from "../services/fetchTotalCustomer";
 
-export function useTotalCustomerData(customerRisk) {
+export function useTotalCustomer(customerRisk) {
   const [chartData, setChartData] = useState([]);
 
   useEffect(() => {
     const loadData = async () => {
       try {
         const result = await fetchTotalCustomer(customerRisk);
-        console.log("Raw API result:", result);
         const formattedData = [
           {
             name: "Conservative",
-            value: parseInt(result.conservative) || 0,
+            value: result.conservative || 0,
           },
-          { name: "Balanced", value: parseInt(result.balanced) || 0 },
-          { name: "Moderate", value: parseInt(result.moderate) || 0 },
-          { name: "Growth", value: parseInt(result.growth) || 0 },
-          { name: "Aggressive", value: parseInt(result.aggressive) || 0 },
-        //   { name: "All", value: parseInt(result.all) || 0 },
+          { name: "Balanced", value: result.balanced || 0 },
+          { name: "Moderate", value: result.moderate || 0 },
+          { name: "Growth", value: result.growth || 0 },
+          { name: "Aggressive", value: result.aggressive || 0 },
         ];
         console.log("Formatted data:", formattedData);
         setChartData(formattedData);

@@ -8,11 +8,16 @@ import FBITotal from "../overview-components/FBITotalGauge";
 import FUMBar from "../overview-components/FUMBar";
 import FBIBar from "../overview-components/FBIBar";
 import CustomerOverview from "../overview-components/CustomerOverviewPie";
-import { useTotalCustomerData } from "../hooks/totalCustomerData";
+
+import { useTotalCustomer } from "../hooks/totalCustomer";
+import { useTotalAUM } from "../hooks/totalAUM";
+import { useTotalFBI } from "../hooks/totalFBI";
 
 export default function OverviewPage() {
   const [customerRisk, setCustomerRisk] = useState("all");
-  const [chartData, setChartData] = useTotalCustomerData(customerRisk);
+  const [customerData] = useTotalCustomer(customerRisk);
+  const [aumData] = useTotalAUM(customerRisk);
+  const [fbiData] = useTotalFBI(customerRisk);
 
   return (
     <div className="flex h-screen bg-gray-900 text-gray-200">
@@ -28,13 +33,16 @@ export default function OverviewPage() {
         <main className="grid gap-2 flex-1 overflow-y-auto mr-2 my-2">
           <div className="grid grid-cols-3 gap-2">
             <div className="rounded-2xl" style={{ backgroundColor: "#1D283A" }}>
-              <TotalCustomer customerRisk={customerRisk} chartData={chartData}/>
+              <TotalCustomer
+                customerRisk={customerRisk}
+                customerData={customerData}
+              />
             </div>
             <div className="rounded-2xl" style={{ backgroundColor: "#1D283A" }}>
-              <AUMTotal customerRisk={customerRisk} />
+              <AUMTotal customerRisk={customerRisk} aumData={aumData} />
             </div>
             <div className="rounded-2xl" style={{ backgroundColor: "#1D283A" }}>
-              <FBITotal customerRisk={customerRisk} />
+              <FBITotal customerRisk={customerRisk} fbiData={fbiData} />
             </div>
           </div>
 
@@ -47,9 +55,8 @@ export default function OverviewPage() {
             </div>
             <div className="rounded-2xl" style={{ backgroundColor: "#1D283A" }}>
               <CustomerOverview
-                customerRisk={customerRisk}
                 setCustomerRisk={setCustomerRisk}
-                chartData={chartData}
+                customerData={customerData}
               />
             </div>
           </div>

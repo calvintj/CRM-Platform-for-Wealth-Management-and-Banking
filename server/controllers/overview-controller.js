@@ -1,4 +1,8 @@
-const { getTotalCustomer } = require("../models/overview");
+const {
+  getTotalCustomer,
+  getTotalAUM,
+  getTotalFBI,
+} = require("../models/overview");
 
 const getTotalCustomerController = async (req, res) => {
   const { rm_number, customerRisk } = req.query;
@@ -6,4 +10,20 @@ const getTotalCustomerController = async (req, res) => {
   res.json(totalCustomer);
 };
 
-module.exports = { getTotalCustomerController };
+const getTotalAUMController = async (req, res) => {
+  const { rm_number, customerRisk } = req.query;
+  const totalAUM = await getTotalAUM(rm_number, customerRisk);
+  res.json(totalAUM);
+};
+
+const getTotalFBIController = async (req, res) => {
+  const { rm_number, customerRisk } = req.query;
+  const totalFBI = await getTotalFBI(rm_number, customerRisk);
+  res.json(totalFBI);
+};
+
+module.exports = {
+  getTotalCustomerController,
+  getTotalAUMController,
+  getTotalFBIController,
+};

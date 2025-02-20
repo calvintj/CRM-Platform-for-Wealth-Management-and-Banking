@@ -2,10 +2,10 @@
 import { PieChart as RePieChart, Pie, Cell, Label } from "recharts";
 import PropTypes from "prop-types";
 
-export default function GaugeChart({ chartData, customerRisk }) {
+export default function GaugeChart({ customerData, customerRisk }) {
   // const [currentValue, setCurrentValue] = useState(0);
   const currentValue =
-    customerRisk?.value || chartData.reduce((sum, item) => sum + item.value, 0);
+    customerRisk?.value || customerData.reduce((sum, item) => sum + item.value, 0);
   const targetValue = 500;
 
   // Two slices: "Completed" vs. "Remaining"
@@ -15,20 +15,20 @@ export default function GaugeChart({ chartData, customerRisk }) {
   ];
 
   // Dimensions for the chart
-  const chartWidth = 300;
-  const chartHeight = 180;
+  const chartWidth = 400;
+  const chartHeight = 200;
 
   // Center x/y
-  const cx = 150; // half of chartWidth
-  const cy = 130; // lower this if you see it's cut off
+  const cx = 200; // half of chartWidth
+  const cy = 140; // lower this if you see it's cut off
 
-  const innerRadius = 80;
-  const outerRadius = 100;
+  const innerRadius = 100;
+  const outerRadius = 125;
 
   return (
     <div className="flex flex-col items-center justify-center">
       {/* Title above the chart */}
-      <div className="text-white font-semibold mt-4">Jumlah Nasabah</div>
+      <div className="text-white font-semibold mt-4" style={{ fontSize: "1.5rem" }}>Jumlah Nasabah</div>
 
       <RePieChart width={chartWidth} height={chartHeight}>
         <Pie
@@ -80,5 +80,5 @@ GaugeChart.propTypes = {
       all: PropTypes.number,
     }),
   }),
-  chartData: PropTypes.arrayOf(PropTypes.object),
+  customerData: PropTypes.arrayOf(PropTypes.object),
 };

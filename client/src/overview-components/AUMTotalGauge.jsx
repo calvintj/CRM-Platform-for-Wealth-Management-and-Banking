@@ -1,34 +1,40 @@
 // PieChart.js
+import { PieChart as RePieChart, Pie, Cell, Label } from "recharts";
+import PropTypes from "prop-types";
 
-import React from 'react';
-import { PieChart as RePieChart, Pie, Cell, Label } from 'recharts';
+export default function GaugeChart({ aumData, customerRisk }) {
+  const currentValue = (() => {
+    if (customerRisk === "all") {
+      return aumData.reduce((sum, item) => sum + item.value, 0);
+    } else {
+      const aumValue = aumData.find((item) => item.name === customerRisk.name);
+      return aumValue ? aumValue.value : 0;
+    }
+  })();
 
-export default function GaugeChart() {
-  // Example values
-  const currentValue = 121;
-  const targetValue = 150;
+  const targetValue = 800000000;
 
   // Two slices: "Completed" vs. "Remaining"
   const data = [
-    { name: 'Completed', value: currentValue, color: '#2ABC36' },
-    { name: 'Remaining', value: targetValue - currentValue, color: '#FFFFFF' },
+    { name: "Completed", value: currentValue, color: "#2ABC36" },
+    { name: "Remaining", value: targetValue - currentValue, color: "#FFFFFF" },
   ];
 
   // Dimensions for the chart
-  const chartWidth = 300;
-  const chartHeight = 180;
+  const chartWidth = 400;
+  const chartHeight = 200;
 
   // Center x/y
-  const cx = 150; // half of chartWidth
-  const cy = 130; // lower this if you see it's cut off
+  const cx = 200; // half of chartWidth
+  const cy = 140; // lower this if you see it's cut off
 
-  const innerRadius = 80;
-  const outerRadius = 100;
+  const innerRadius = 100;
+  const outerRadius = 125;
 
   return (
     <div className="flex flex-col items-center justify-center">
       {/* Title above the chart */}
-      <div className="text-white font-semibold mt-4">Total AUM</div>
+      <div className="text-white font-semibold mt-4" style={{ fontSize: "1.5rem" }}>Total AUM</div>
 
       <RePieChart width={chartWidth} height={chartHeight}>
         <Pie
@@ -51,10 +57,10 @@ export default function GaugeChart() {
             position="center"
             dy={-10}
             style={{
-              fill: '#FFFFFF',
-              fontSize: '24px',
-              fontWeight: 'bold',
-              textAnchor: 'middle',
+              fill: "#FFFFFF",
+              fontSize: "24px",
+              fontWeight: "bold",
+              textAnchor: "middle",
             }}
           />
           {/* Target label */}
@@ -63,9 +69,9 @@ export default function GaugeChart() {
             position="center"
             dy={20}
             style={{
-              fill: '#CCCCCC',
-              fontSize: '14px',
-              textAnchor: 'middle',
+              fill: "#CCCCCC",
+              fontSize: "14px",
+              textAnchor: "middle",
             }}
           />
         </Pie>
@@ -73,3 +79,11 @@ export default function GaugeChart() {
     </div>
   );
 }
+
+GaugeChart.propTypes = {
+  aumData: PropTypes.shape({
+    reduce: PropTypes.func,
+    find: PropTypes.func,
+  }),
+  customerRisk: PropTypes.string,
+};

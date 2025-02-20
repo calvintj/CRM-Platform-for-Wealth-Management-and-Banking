@@ -42,11 +42,11 @@ const defaultColors = ["#F52720", "#01ACD2", "#2ABC36", "#FBB716", "#F0FF1B"];
 export default function RiskProfilePie({
   colors = defaultColors,
   title = "Profil Risiko Nasabah",
-  chartData,
+  customerData,
   setCustomerRisk,
 }) {
-  console.log(chartData);
-  if (chartData.length === 0 || chartData.every((item) => item.value === 0)) {
+  console.log(customerData);
+  if (customerData.length === 0 || customerData.every((item) => item.value === 0)) {
     return <div className="text-center text-gray-400">No data available</div>;
   }
 
@@ -74,7 +74,7 @@ export default function RiskProfilePie({
       <ResponsiveContainer width="100%" aspect={1.5}>
         <PieChart>
           <Pie
-            data={chartData}
+            data={customerData}
             cx="50%"
             cy="50%"
             innerRadius={70}
@@ -84,8 +84,7 @@ export default function RiskProfilePie({
             dataKey="value"
             paddingAngle={2}
           >
-            {chartData
-              // .filter((item) => item.name !== "5 - Aggressive")
+            {customerData
               .map((entry, index) => (
                 <Cell
                   key={`cell-${index}`}
@@ -122,7 +121,6 @@ export default function RiskProfilePie({
 RiskProfilePie.propTypes = {
   colors: PropTypes.arrayOf(PropTypes.string),
   title: PropTypes.string,
-  customerRisk: PropTypes.string,
   setCustomerRisk: PropTypes.func,
-  chartData: PropTypes.arrayOf(PropTypes.object),
+  customerData: PropTypes.arrayOf(PropTypes.object),
 };
