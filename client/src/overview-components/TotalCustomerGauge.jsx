@@ -1,17 +1,17 @@
 // PieChart.js
+import { PieChart as RePieChart, Pie, Cell, Label } from "recharts";
+import PropTypes from "prop-types";
 
-import React from 'react';
-import { PieChart as RePieChart, Pie, Cell, Label } from 'recharts';
-
-export default function GaugeChart() {
-  // Example values
-  const currentValue = 121;
-  const targetValue = 150;
+export default function GaugeChart({ chartData, customerRisk }) {
+  // const [currentValue, setCurrentValue] = useState(0);
+  const currentValue =
+    customerRisk?.value || chartData.reduce((sum, item) => sum + item.value, 0);
+  const targetValue = 500;
 
   // Two slices: "Completed" vs. "Remaining"
   const data = [
-    { name: 'Completed', value: currentValue, color: '#F52720' },
-    { name: 'Remaining', value: targetValue - currentValue, color: '#FFFFFF' },
+    { name: "Completed", value: currentValue, color: "#F52720" },
+    { name: "Remaining", value: targetValue - currentValue, color: "#FFFFFF" },
   ];
 
   // Dimensions for the chart
@@ -51,10 +51,10 @@ export default function GaugeChart() {
             position="center"
             dy={-10}
             style={{
-              fill: '#FFFFFF',
-              fontSize: '24px',
-              fontWeight: 'bold',
-              textAnchor: 'middle',
+              fill: "#FFFFFF",
+              fontSize: "24px",
+              fontWeight: "bold",
+              textAnchor: "middle",
             }}
           />
           {/* Target label */}
@@ -63,9 +63,9 @@ export default function GaugeChart() {
             position="center"
             dy={20}
             style={{
-              fill: '#CCCCCC',
-              fontSize: '14px',
-              textAnchor: 'middle',
+              fill: "#CCCCCC",
+              fontSize: "14px",
+              textAnchor: "middle",
             }}
           />
         </Pie>
@@ -73,3 +73,12 @@ export default function GaugeChart() {
     </div>
   );
 }
+
+GaugeChart.propTypes = {
+  customerRisk: PropTypes.shape({
+    value: PropTypes.shape({
+      all: PropTypes.number,
+    }),
+  }),
+  chartData: PropTypes.arrayOf(PropTypes.object),
+};

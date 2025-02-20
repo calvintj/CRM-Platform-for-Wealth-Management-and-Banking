@@ -1,5 +1,5 @@
-import React from "react";
 import PropTypes from "prop-types";
+
 import {
   PieChart,
   Pie,
@@ -37,20 +37,19 @@ const renderCustomizedLabel = ({
   );
 };
 
-const defaultData = [
-  { name: "Conservative", value: 45 },
-  { name: "Balanced", value: 25 },
-  { name: "Moderate", value: 15 },
-  { name: "Aggressive", value: 15 },
-];
-
-const defaultColors = ["#F52720", "#01ACD2", "#2ABC36", "#F0FF1B"];
+const defaultColors = ["#F52720", "#01ACD2", "#2ABC36", "#FBB716", "#F0FF1B"];
 
 export default function RiskProfilePie({
-  data = defaultData,
   colors = defaultColors,
   title = "Profil Risiko Nasabah",
+  chartData,
+  setCustomerRisk,
 }) {
+  console.log(chartData);
+  if (chartData.length === 0 || chartData.every((item) => item.value === 0)) {
+    return <div className="text-center text-gray-400">No data available</div>;
+  }
+
   return (
     <div
       style={{
@@ -62,14 +61,20 @@ export default function RiskProfilePie({
       role="region"
       aria-label="Risk Profile Distribution Chart"
     >
-      <h3 style={{ textAlign: "center", margin: "0 0 1.2rem", fontSize: "1.2rem" }}>
+      <h3
+        style={{
+          textAlign: "center",
+          margin: "0 0 1.2rem",
+          fontSize: "1.2rem",
+        }}
+      >
         {title}
       </h3>
 
       <ResponsiveContainer width="100%" aspect={1.5}>
         <PieChart>
           <Pie
-            data={data}
+            data={chartData}
             cx="50%"
             cy="50%"
             innerRadius={70}
@@ -77,21 +82,29 @@ export default function RiskProfilePie({
             labelLine={false}
             label={renderCustomizedLabel}
             dataKey="value"
-            onMouseEnter={(data, index) => {
-              // Optional: Add hover effects here
-            }}
+            paddingAngle={2}
           >
-            {data.map((entry, index) => (
-              <Cell
-                key={`cell-${index}`}
-                fill={colors[index % colors.length]}
-                stroke="none"
-              />
-            ))}
+            {chartData
+              // .filter((item) => item.name !== "5 - Aggressive")
+              .map((entry, index) => (
+                <Cell
+                  key={`cell-${index}`}
+                  fill={colors[index % colors.length]}
+                  stroke="none"
+                  onClick={() => {
+                    setCustomerRisk({ name: entry.name, value: entry.value });
+                  }}
+                />
+              ))}
           </Pie>
           <Tooltip
-            formatter={(value) => `${value}%`}
-            contentStyle={{ border: "none", borderRadius: "1rem" }}
+            formatter={(value) => `${value} customers`}
+            contentStyle={{
+              background: "white",
+              border: "none",
+              borderRadius: "4px",
+              color: "black",
+            }}
           />
           <Legend
             layout="vertical"
@@ -107,12 +120,9 @@ export default function RiskProfilePie({
 }
 
 RiskProfilePie.propTypes = {
-  data: PropTypes.arrayOf(
-    PropTypes.shape({
-      name: PropTypes.string.isRequired,
-      value: PropTypes.number.isRequired,
-    })
-  ),
   colors: PropTypes.arrayOf(PropTypes.string),
   title: PropTypes.string,
+  customerRisk: PropTypes.string,
+  setCustomerRisk: PropTypes.func,
+  chartData: PropTypes.arrayOf(PropTypes.object),
 };

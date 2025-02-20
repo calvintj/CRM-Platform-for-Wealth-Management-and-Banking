@@ -1,5 +1,7 @@
 const db = require('../config/db');
 
+
+
 // Find user by email
 const findAccountByEmail = async (email) => {
   const queryText = 'SELECT * FROM rm_account WHERE LOWER(email) = LOWER($1)';

@@ -1,12 +1,13 @@
-import React from 'react';
-import { NavLink } from 'react-router-dom';
+import { NavLink, useNavigate } from "react-router-dom";
 import Logo from "../assets/persen white.png";
 
 import { RiRobot3Line } from "react-icons/ri";
 
 export default function Sidebar() {
+  const navigate = useNavigate();
   // Define a common class for the links
-  const linkClass = "text-gray-300 hover:text-white flex items-center gap-2 py-2 px-3 rounded-md";
+  const linkClass =
+    "text-gray-300 hover:text-white flex items-center gap-2 py-2 px-3 rounded-md";
 
   const handleLogout = () => {
     localStorage.removeItem("token");
@@ -125,7 +126,12 @@ export default function Sidebar() {
 
       {/* Footer or user profile section */}
       <div className="mt-auto">
-        <button className="text-gray-300 hover:text-white py-2" onClick={handleLogout}><NavLink to="/">Log Out</NavLink></button>
+        <button
+          className="text-gray-300 hover:text-white py-2"
+          onClick={handleLogout}
+        >
+          <NavLink to="/">Log Out</NavLink>
+        </button>
       </div>
     </aside>
   );

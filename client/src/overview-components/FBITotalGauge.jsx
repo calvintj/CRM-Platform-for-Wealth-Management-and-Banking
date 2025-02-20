@@ -1,6 +1,3 @@
-// PieChart.js
-
-import React from 'react';
 import { PieChart as RePieChart, Pie, Cell, Label } from 'recharts';
 
 export default function GaugeChart() {
