@@ -35,18 +35,18 @@ export default function OverviewPage() {
 
   // RENDER
   return (
-    <div className="flex h-screen bg-gray-900 text-gray-200">
+    <div className="flex min-h-screen bg-gray-900 text-gray-200">
       {/* SIDEBAR */}
       <Sidebar />
 
       {/* MAIN CONTENT AREA */}
       <div className="flex-1 flex flex-col">
         {/* NAVBAR */}
-        <Navbar customerRisk={customerRisk} setCustomerRisk={setCustomerRisk}/>
+        <Navbar customerRisk={customerRisk} setCustomerRisk={setCustomerRisk} />
 
         {/* DASHBOARD CONTENT */}
         <main className="grid gap-2 flex-1 overflow-y-auto mr-2 my-2">
-          <div className="grid grid-cols-3 gap-2">
+          <div className="grid grid-cols-1 md:grid-cols-3 gap-2">
             <div className="rounded-2xl" style={{ backgroundColor: "#1D283A" }}>
               <TotalCustomer
                 customerRisk={customerRisk}
@@ -61,7 +61,7 @@ export default function OverviewPage() {
             </div>
           </div>
 
-          <div className="grid grid-cols-3 gap-2">
+          <div className="grid grid-cols-1 md:grid-cols-3 gap-2">
             <div
               className="rounded-2xl col-span-2"
               style={{ backgroundColor: "#1D283A" }}
@@ -81,7 +81,7 @@ export default function OverviewPage() {
             </div>
           </div>
 
-          <div className="grid grid-cols-3 gap-2">
+          <div className="grid grid-cols-1 md:grid-cols-3 gap-2">
             <div
               className="rounded-2xl col-span-2"
               style={{ backgroundColor: "#1D283A" }}
@@ -92,14 +92,17 @@ export default function OverviewPage() {
                 setCustomerRisk={setCustomerRisk}
               />
             </div>
-            <div
-              className="rounded-2xl"
-              style={{ backgroundColor: "#1D283A" }}
-            >
+            <div className="rounded-2xl" style={{ backgroundColor: "#1D283A" }}>
               {/* <TopProducts
                 customerRisk={customerRisk}
                 topProducts={topProducts}
               /> */}
+            </div>
+          </div>
+
+          <div className="grid grid-cols-1 gap-2">
+          <div className="rounded-2xl" style={{ backgroundColor: "#1D283A" }}>
+              
             </div>
           </div>
         </main>

@@ -6,7 +6,6 @@ const LoginPage = () => {
 
   const handleSubmit = async (e) => {
     e.preventDefault();
-    // Get email and password from the form
     const email = e.target.email.value;
     const password = e.target.password.value;
 
@@ -22,14 +21,10 @@ const LoginPage = () => {
       const data = await response.json();
 
       if (response.ok) {
-        // Save the token and navigate to a protected route
         localStorage.setItem("token", data.token);
-        
-        navigate("/overview"); // Replace with your desired route
+        navigate("/overview");
       } else {
-        // Handle errors (e.g., display error message)
         console.error("Login error:", data.error);
-        // You could also set an error state here to display in the UI
       }
     } catch (error) {
       console.error("Error during login:", error);
@@ -37,36 +32,18 @@ const LoginPage = () => {
   };
 
   return (
-    <div
-      className="flex justify-center items-center h-screen"
-      style={{
-        fontFamily: "'Poppins', sans-serif",
-        backgroundColor: "#1D283A",
-      }}
-    >
-      <div
-        className="flex flex-col md:flex-row border rounded-2xl p-6 bg-white shadow-lg"
-        style={{ width: "930px" }}
-      >
+    <div className="min-h-screen flex items-center justify-center bg-[#1D283A]">
+      <div className="flex flex-col md:flex-row bg-white rounded-2xl shadow-lg overflow-hidden max-w-[930px] w-full mx-4 border-white border-2">
         {/* Left Box */}
-        <div
-          className="w-full md:w-1/2 flex flex-col items-center justify-center p-4 rounded-2xl"
-          style={{ backgroundColor: "#1D283A" }}
-        >
-          <img src={bati} alt="Fund Manager CRM" className="w-[250px] mb-3" />
-          <small
-            className="text-white text-center"
-            style={{
-              width: "17rem",
-              fontFamily: "'Courier New', Courier, monospace",
-            }}
-          >
+        <div className="md:w-1/2 flex flex-col items-center justify-center p-4 bg-[#1D283A]">
+          <img src={bati} alt="Fund Manager CRM" className="w-40 md:w-60 mb-3" />
+          <small className="text-white text-center font-mono w-72">
             Stay on top of client interactions and investments seamlessly.
           </small>
         </div>
 
         {/* Right Box */}
-        <div className="w-full md:w-1/2 p-4">
+        <div className="md:w-1/2 p-4">
           <div className="mb-4">
             <h2 className="text-2xl font-bold mb-2">Welcome Back</h2>
             <p>Log in to continue managing your funds.</p>

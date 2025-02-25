@@ -301,164 +301,164 @@ const getQuarterlyFBI = async (rm_number, customerRisk) => {
   }
 };
 
-// const getTopProducts = async (rm_number, customerRisk) => {
-//   // Map display risk names to the database’s risk_profile values
-//   const riskMapping = {
-//     Conservative: '1 - Conservative',
-//     Balanced: '2 - Balanced',
-//     Moderate: '3 - Moderate',
-//     Growth: '4 - Growth',
-//     Aggressive: '5 - Aggressive'
-//   };
+const getTopProducts = async (rm_number, customerRisk) => {
+  // Map display risk names to the database’s risk_profile values
+  const riskMapping = {
+    Conservative: '1 - Conservative',
+    Balanced: '2 - Balanced',
+    Moderate: '3 - Moderate',
+    Growth: '4 - Growth',
+    Aggressive: '5 - Aggressive'
+  };
 
-//   if (customerRisk === "all") {
-//     const result = await db.query(
-//       `
-//       WITH all_products AS (
-//         SELECT
-//           ra.rm_number,
-//           ht.nama_produk,
-//           SUM(ht.jumlah_amount) AS total_amount
-//         FROM historical_transaction ht
-//         JOIN customer_info ci 
-//           ON ht.bp_number_wm_core = ci.bp_number_wm_core
-//         JOIN rm_account ra 
-//           ON ci.assigned_rm = ra.rm_number
-//         WHERE ci.risk_profile <> '0'
-//           AND ra.rm_number = '${rm_number}'
-//         GROUP BY ra.rm_number, ht.nama_produk
-//       ),
-//       ranked_all AS (
-//         SELECT
-//           rm_number,
-//           nama_produk,
-//           total_amount,
-//           ROW_NUMBER() OVER (PARTITION BY rm_number ORDER BY total_amount DESC) AS rn
-//         FROM all_products
-//       ),
-//       profile_products AS (
-//         SELECT
-//           ra.rm_number,
-//           ci.risk_profile,
-//           ht.nama_produk,
-//           SUM(ht.jumlah_amount) AS total_amount
-//         FROM historical_transaction ht
-//         JOIN customer_info ci 
-//           ON ht.bp_number_wm_core = ci.bp_number_wm_core
-//         JOIN rm_account ra 
-//           ON ci.assigned_rm = ra.rm_number
-//         WHERE ci.risk_profile <> '0'
-//           AND ra.rm_number = '${rm_number}'
-//         GROUP BY ra.rm_number, ci.risk_profile, ht.nama_produk
-//       ),
-//       ranked_profile AS (
-//         SELECT
-//           rm_number,
-//           risk_profile,
-//           nama_produk,
-//           total_amount,
-//           ROW_NUMBER() OVER (PARTITION BY rm_number, risk_profile ORDER BY total_amount DESC) AS rn
-//         FROM profile_products
-//       )
-//       SELECT 
-//         rm_number,
-//         'All' AS category,
-//         nama_produk,
-//         total_amount
-//       FROM ranked_all
-//       WHERE rn <= 5
+  if (customerRisk === "all") {
+    const result = await db.query(
+      `
+      WITH all_products AS (
+        SELECT
+          ra.rm_number,
+          ht.nama_produk,
+          SUM(ht.jumlah_amount) AS total_amount
+        FROM historical_transaction ht
+        JOIN customer_info ci 
+          ON ht.bp_number_wm_core = ci.bp_number_wm_core
+        JOIN rm_account ra 
+          ON ci.assigned_rm = ra.rm_number
+        WHERE ci.risk_profile <> '0'
+          AND ra.rm_number = '${rm_number}'
+        GROUP BY ra.rm_number, ht.nama_produk
+      ),
+      ranked_all AS (
+        SELECT
+          rm_number,
+          nama_produk,
+          total_amount,
+          ROW_NUMBER() OVER (PARTITION BY rm_number ORDER BY total_amount DESC) AS rn
+        FROM all_products
+      ),
+      profile_products AS (
+        SELECT
+          ra.rm_number,
+          ci.risk_profile,
+          ht.nama_produk,
+          SUM(ht.jumlah_amount) AS total_amount
+        FROM historical_transaction ht
+        JOIN customer_info ci 
+          ON ht.bp_number_wm_core = ci.bp_number_wm_core
+        JOIN rm_account ra 
+          ON ci.assigned_rm = ra.rm_number
+        WHERE ci.risk_profile <> '0'
+          AND ra.rm_number = '${rm_number}'
+        GROUP BY ra.rm_number, ci.risk_profile, ht.nama_produk
+      ),
+      ranked_profile AS (
+        SELECT
+          rm_number,
+          risk_profile,
+          nama_produk,
+          total_amount,
+          ROW_NUMBER() OVER (PARTITION BY rm_number, risk_profile ORDER BY total_amount DESC) AS rn
+        FROM profile_products
+      )
+      SELECT 
+        rm_number,
+        'All' AS category,
+        nama_produk,
+        total_amount
+      FROM ranked_all
+      WHERE rn <= 5
 
-//       UNION ALL
+      UNION ALL
 
-//       SELECT
-//         rm_number,
-//         risk_profile AS category,
-//         nama_produk,
-//         total_amount
-//       FROM ranked_profile
-//       WHERE rn <= 5
+      SELECT
+        rm_number,
+        risk_profile AS category,
+        nama_produk,
+        total_amount
+      FROM ranked_profile
+      WHERE rn <= 5
 
-//       ORDER BY rm_number, category, total_amount DESC;
-//       `
-//     );
-//     return {
-//       all: result.rows
-//         .filter((row) => row.category === "All")
-//         .map((row) => ({
-//           product: row.nama_produk,
-//           amount: parseFloat(row.total_amount || 0),
-//           category: "All",
-//         })),
-//       conservative: result.rows
-//         .filter((row) => row.category === "1 - Conservative")
-//         .map((row) => ({
-//           product: row.nama_produk,
-//           amount: parseFloat(row.total_amount || 0),
-//           category: "Conservative",
-//         })),
-//       balanced: result.rows
-//         .filter((row) => row.category === "2 - Balanced")
-//         .map((row) => ({
-//           product: row.nama_produk,
-//           amount: parseFloat(row.total_amount || 0),
-//           category: "Balanced",
-//         })),
-//       moderate: result.rows
-//         .filter((row) => row.category === "3 - Moderate")
-//         .map((row) => ({
-//           product: row.nama_produk,
-//           amount: parseFloat(row.total_amount || 0),
-//           category: "Moderate",
-//         })),
-//       growth: result.rows
-//         .filter((row) => row.category === "4 - Growth")
-//         .map((row) => ({
-//           product: row.nama_produk,
-//           amount: parseFloat(row.total_amount || 0),
-//           category: "Growth",
-//         })),
-//       aggressive: result.rows
-//         .filter((row) => row.category === "5 - Aggressive")
-//         .map((row) => ({
-//           product: row.nama_produk,
-//           amount: parseFloat(row.total_amount || 0),
-//           category: "Aggressive",
-//         })),
-//     };
-//   } else {
-//     // For a specific risk, determine the matching risk_profile value
-//     const riskCategory = riskMapping[customerRisk.name];
-//     if (!riskCategory) {
-//       throw new Error("Invalid customer risk category");
-//     }
-//     const result = await db.query(
-//       `
-//       SELECT
-//         ra.rm_number,
-//         ht.nama_produk,
-//         SUM(ht.jumlah_amount) AS total_amount
-//       FROM historical_transaction ht
-//       JOIN customer_info ci 
-//         ON ht.bp_number_wm_core = ci.bp_number_wm_core
-//       JOIN rm_account ra 
-//         ON ci.assigned_rm = ra.rm_number
-//       WHERE ci.risk_profile <> '0'
-//         AND ra.rm_number = '${rm_number}'
-//         AND ci.risk_profile = '${riskCategory}'
-//       GROUP BY ra.rm_number, ht.nama_produk
-//       ORDER BY total_amount DESC
-//       LIMIT 5;
-//       `
-//     );
-//     return {
-//       [customerRisk.name.toLowerCase()]: result.rows.map((row) => ({
-//         product: row.nama_produk,
-//         amount: parseFloat(row.total_amount || 0),
-//         category: customerRisk.name,
-//       })),
-//     };
-//   }
-// };
+      ORDER BY rm_number, category, total_amount DESC;
+      `
+    );
+    return {
+      all: result.rows
+        .filter((row) => row.category === "All")
+        .map((row) => ({
+          product: row.nama_produk,
+          amount: parseFloat(row.total_amount || 0),
+          category: "All",
+        })),
+      conservative: result.rows
+        .filter((row) => row.category === "1 - Conservative")
+        .map((row) => ({
+          product: row.nama_produk,
+          amount: parseFloat(row.total_amount || 0),
+          category: "Conservative",
+        })),
+      balanced: result.rows
+        .filter((row) => row.category === "2 - Balanced")
+        .map((row) => ({
+          product: row.nama_produk,
+          amount: parseFloat(row.total_amount || 0),
+          category: "Balanced",
+        })),
+      moderate: result.rows
+        .filter((row) => row.category === "3 - Moderate")
+        .map((row) => ({
+          product: row.nama_produk,
+          amount: parseFloat(row.total_amount || 0),
+          category: "Moderate",
+        })),
+      growth: result.rows
+        .filter((row) => row.category === "4 - Growth")
+        .map((row) => ({
+          product: row.nama_produk,
+          amount: parseFloat(row.total_amount || 0),
+          category: "Growth",
+        })),
+      aggressive: result.rows
+        .filter((row) => row.category === "5 - Aggressive")
+        .map((row) => ({
+          product: row.nama_produk,
+          amount: parseFloat(row.total_amount || 0),
+          category: "Aggressive",
+        })),
+    };
+  } else {
+    // For a specific risk, determine the matching risk_profile value
+    const riskCategory = riskMapping[customerRisk.name];
+    if (!riskCategory) {
+      throw new Error("Invalid customer risk category");
+    }
+    const result = await db.query(
+      `
+      SELECT
+        ra.rm_number,
+        ht.nama_produk,
+        SUM(ht.jumlah_amount) AS total_amount
+      FROM historical_transaction ht
+      JOIN customer_info ci 
+        ON ht.bp_number_wm_core = ci.bp_number_wm_core
+      JOIN rm_account ra 
+        ON ci.assigned_rm = ra.rm_number
+      WHERE ci.risk_profile <> '0'
+        AND ra.rm_number = '${rm_number}'
+        AND ci.risk_profile = '${riskCategory}'
+      GROUP BY ra.rm_number, ht.nama_produk
+      ORDER BY total_amount DESC
+      LIMIT 5;
+      `
+    );
+    return {
+      [customerRisk.name.toLowerCase()]: result.rows.map((row) => ({
+        product: row.nama_produk,
+        amount: parseFloat(row.total_amount || 0),
+        category: customerRisk.name,
+      })),
+    };
+  }
+};
 
 
 module.exports = {
@@ -467,5 +467,5 @@ module.exports = {
   getTotalFBI,
   getQuarterlyFBI,
   getQuarterlyFUM,
-  // getTopProducts,
+  getTopProducts,
 };

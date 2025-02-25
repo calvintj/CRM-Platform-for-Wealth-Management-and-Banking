@@ -1,6 +1,5 @@
 import PropTypes from "prop-types";
 import React from "react";
-
 import {
   PieChart,
   Pie,
@@ -31,14 +30,20 @@ const renderCustomizedLabel = ({
       fill="#fff"
       textAnchor={x > cx ? "start" : "end"}
       dominantBaseline="central"
-      style={{ fontSize: "0.9rem", fontWeight: "bold" }}
+      className="text-sm md:text-base font-bold"
     >
       {`${(percent * 100).toFixed(0)}%`}
     </text>
   );
 };
 
-const defaultColors = ["#F52720", "#01ACD2", "#2ABC36", "#FBB716", "#F0FF1B"];
+const defaultColors = [
+  "#F52720",
+  "#01ACD2",
+  "#2ABC36",
+  "#FBB716",
+  "#F0FF1B",
+];
 
 export default function RiskProfilePie({
   colors = defaultColors,
@@ -46,8 +51,20 @@ export default function RiskProfilePie({
   setCustomerRisk,
   customerRisk,
 }) {
+  // Responsive radii and legend layout based on window width
+  const [windowWidth, setWindowWidth] = React.useState(window.innerWidth);
+  React.useEffect(() => {
+    const handleResize = () => setWindowWidth(window.innerWidth);
+    window.addEventListener("resize", handleResize);
+    return () => window.removeEventListener("resize", handleResize);
+  }, []);
+
+  const isMobile = windowWidth < 768;
+  const innerRadius = isMobile ? 40 : 60;
+  const outerRadius = isMobile ? 70 : 100;
+  const chartAspect = isMobile ? 1 : 1.4;
+
   const [selectedIndex, setSelectedIndex] = React.useState(() => {
-    // Initialize selectedIndex based on customerRisk if available
     const riskIndex = customerData
       .filter((entry) => entry.name !== "All")
       .findIndex((entry) => entry.name === customerRisk?.name);
@@ -55,7 +72,6 @@ export default function RiskProfilePie({
   });
 
   React.useEffect(() => {
-    // Update selectedIndex when customerRisk changes externally
     const riskIndex = customerData
       .filter((entry) => entry.name !== "All")
       .findIndex((entry) => entry.name === customerRisk?.name);
@@ -66,26 +82,19 @@ export default function RiskProfilePie({
     customerData.length === 0 ||
     customerData.every((item) => item.value === 0)
   ) {
-    return <div className="text-center text-gray-400">No data available</div>;
+    return (
+      <div className="text-center text-gray-400">
+        No data available
+      </div>
+    );
   }
 
   return (
-    <div
-      style={{
-        padding: "1rem",
-      }}
-    >
-      <h3
-        style={{
-          textAlign: "center",
-          fontSize: "1.5rem",
-          fontWeight: "bold",
-        }}
-      >
+    <div className="p-4">
+      <h3 className="text-center text-xl md:text-2xl font-bold mb-4">
         Profil Risiko Nasabah
       </h3>
-
-      <ResponsiveContainer aspect={1.4}>
+      <ResponsiveContainer width="100%" aspect={chartAspect}>
         <PieChart
           onClick={() => {
             setSelectedIndex(null);
@@ -94,12 +103,13 @@ export default function RiskProfilePie({
         >
           <Pie
             data={customerData.filter((entry) => entry.name !== "All")}
-            innerRadius={60}
-            outerRadius={100}
+            innerRadius={innerRadius}
+            outerRadius={outerRadius}
             labelLine={false}
             label={renderCustomizedLabel}
             dataKey="value"
             paddingAngle={2}
+            cursor="pointer"
           >
             {customerData
               .filter((entry) => entry.name !== "All")
@@ -113,11 +123,16 @@ export default function RiskProfilePie({
                   }
                   stroke="none"
                   opacity={
-                    selectedIndex === null || selectedIndex === index ? 1 : 0.3
+                    selectedIndex === null || selectedIndex === index
+                      ? 1
+                      : 0.3
                   }
                   onClick={(e) => {
                     e.stopPropagation();
-                    setCustomerRisk({ name: entry.name, value: entry.value });
+                    setCustomerRisk({
+                      name: entry.name,
+                      value: entry.value,
+                    });
                     setSelectedIndex(index === selectedIndex ? null : index);
                   }}
                 />
@@ -133,11 +148,14 @@ export default function RiskProfilePie({
             }}
           />
           <Legend
-            layout="vertical"
-            verticalAlign="middle"
-            align="right"
+            layout={isMobile ? "horizontal" : "vertical"}
+            verticalAlign={isMobile ? "bottom" : "middle"}
+            align={isMobile ? "center" : "right"}
             iconType="circle"
-            wrapperStyle={{ color: "#fff", fontSize: "0.9rem" }}
+            wrapperStyle={{
+              color: "#fff",
+              fontSize: isMobile ? "0.75rem" : "0.9rem",
+            }}
           />
         </PieChart>
       </ResponsiveContainer>
