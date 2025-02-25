@@ -10,6 +10,10 @@ export function useTotalCustomer(customerRisk) {
         const result = await fetchTotalCustomer(customerRisk);
         const formattedData = [
           {
+            name: "All",
+            value: result.all || 0,
+          },
+          {
             name: "Conservative",
             value: result.conservative || 0,
           },

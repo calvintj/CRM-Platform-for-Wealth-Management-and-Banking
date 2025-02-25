@@ -122,7 +122,7 @@ export default function Sidebar() {
             `${linkClass} ${isActive ? "bg-gray-700" : ""}`
           }
         >
-          <RiRobot3Line />
+          {/* <RiRobot3Line /> */}
         </NavLink>
       </nav>
 

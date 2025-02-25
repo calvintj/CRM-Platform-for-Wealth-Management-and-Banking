@@ -1,4 +1,4 @@
-import React, { PureComponent } from "react";
+import { PureComponent } from "react";
 import {
   BarChart,
   Bar,
@@ -8,62 +8,12 @@ import {
   Tooltip,
   ResponsiveContainer,
 } from "recharts";
-
-// Custom tick component to show quarter on one line and year on the next line
-function CustomXAxisTick(props) {
-  const { x, y, index, data } = props;
-  const { quarter, year } = data[index];
-
-  let showYear = false;
-  let displayYear = "";
-  if (index === 2) {
-    showYear = true;
-    displayYear = "2023";
-  } else if (index === 5) {
-    showYear = true;
-    displayYear = "2024";
-  }
-
-  return (
-    <g transform={`translate(${x},${y})`}>
-      <text
-        x={0}
-        y={0}
-        dy={10}
-        fill="#fff"
-        textAnchor="middle"
-        style={{ fontSize: "0.9rem" }}
-      >
-        {quarter}
-      </text>
-      {showYear && (
-        <text
-          x={0}
-          y={0}
-          dx={-70}
-          dy={30}
-          fill="#fff"
-          textAnchor="middle"
-          style={{ fontSize: "0.9rem" }}
-        >
-          {displayYear}
-        </text>
-      )}
-    </g>
-  );
-}
+import XAxisInformation from "../components/XAxisInformation";
+import PropTypes from "prop-types";
 
 export default class FBIBar extends PureComponent {
   state = {
-    data: [
-      { quarter: "Q1", year: 2023, fbi: 30000 },
-      { quarter: "Q2", year: 2023, fbi: 29000 },
-      { quarter: "Q3", year: 2023, fbi: 31000 },
-      { quarter: "Q4", year: 2023, fbi: 32000 },
-      { quarter: "Q1", year: 2024, fbi: 33000 },
-      { quarter: "Q2", year: 2024, fbi: 28000, isForecast: true },
-    ],
-    activeIndex: 0,
+    activeIndex: null,
   };
 
   handleClick = (_, index) => {
@@ -71,8 +21,18 @@ export default class FBIBar extends PureComponent {
   };
 
   render() {
-    const { data, activeIndex } = this.state;
-    const activeItem = data[activeIndex];
+    const { quarterlyFBI } = this.props;
+    const { activeIndex } = this.state;
+    const customerRisk = this.props.customerRisk;
+
+    // Use the passed data or fallback to an empty array if not provided
+    const filterKey = customerRisk === "all" ? "All" : customerRisk.name;
+
+    // Filter the data based on the filterKey.
+    const data =
+      quarterlyFBI && quarterlyFBI.length
+        ? quarterlyFBI.filter((entry) => entry.name.startsWith(filterKey))
+        : [];
 
     return (
       <div
@@ -84,38 +44,24 @@ export default class FBIBar extends PureComponent {
           width: "100%",
         }}
       >
-        <h3
-          style={{
-            textAlign: "center",
-            fontSize: "1.2rem",
-          }}
-        >
+        <h3 className="text-white text-2xl font-bold mb-4 text-center">
           FBI per Kuartal
         </h3>
 
         <ResponsiveContainer width="100%" height={300}>
           <BarChart
             data={data}
-            margin={{ top: 0, right: 20, left: 20, bottom: 20 }}
+            margin={{ top: 30, right: 50, left: 50, bottom: 20 }}
           >
             <XAxis
-              dataKey="quarter"
-              axisLine={false}
-              tickLine={false}
-              tick={<CustomXAxisTick data={data} />}
+              dataKey="name" // Changed from "quarter" to "name" if using hook data format
+              axisLine={true}
+              tickLine={true}
+              tick={<XAxisInformation data={data} />}
+              stroke="#FFFFFF"
+              interval={0}
             />
-            <YAxis
-              tick={false}
-              axisLine={false}
-              label={{
-                value: "in Rp000",
-                angle: -90,
-                position: "insideLeft",
-                fill: "#fff",
-                dx: 80,
-                dy: 50,
-              }}
-            />
+            <YAxis tick={true} axisLine={true} stroke="#FFFFFF" />
             <Tooltip
               cursor={{ fill: "rgba(255,255,255,0.1)" }}
               contentStyle={{
@@ -123,15 +69,17 @@ export default class FBIBar extends PureComponent {
                 borderRadius: "1rem",
               }}
               labelStyle={{ color: "black" }}
-              formatter={(val) => val.toLocaleString()}
+              formatter={(val) => [val.toLocaleString(), "FBI"]}
+              labelFormatter={() => ""}
             />
             <Bar
-              dataKey="fbi"
+              dataKey="value" // Changed from "fbi" to "value"
               onClick={this.handleClick}
               barSize={50}
               radius={[8, 8, 0, 0]}
             >
               {data.map((entry, index) => {
+                // Adjust color logic if your data includes an "isForecast" flag or similar property
                 const baseColor = entry.isForecast ? "#7f8c8d" : "#01ACD2";
                 const fillColor = index === activeIndex ? "#33C7E6" : baseColor;
                 return (
@@ -145,13 +93,13 @@ export default class FBIBar extends PureComponent {
             </Bar>
           </BarChart>
         </ResponsiveContainer>
-
-        {/* <p style={{ marginTop: "1rem", textAlign: "center" }}>
-          {`FBI of "${activeItem.quarter} ${
-            activeItem.year
-          }" : ${activeItem.fbi.toLocaleString()}`}
-        </p> */}
       </div>
     );
   }
 }
+
+FBIBar.propTypes = {
+  quarterlyFBI: PropTypes.array.isRequired,
+  customerRisk: PropTypes.string.isRequired,
+  setCustomerRisk: PropTypes.func.isRequired,
+};

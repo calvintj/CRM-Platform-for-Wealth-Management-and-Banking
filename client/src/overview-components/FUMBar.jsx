@@ -1,4 +1,5 @@
-import React, { PureComponent } from "react";
+import { PureComponent } from "react";
+import PropTypes from "prop-types";
 import {
   BarChart,
   Bar,
@@ -8,63 +9,11 @@ import {
   Tooltip,
   ResponsiveContainer,
 } from "recharts";
-
-// Custom tick component to show quarter on one line and year on the next line
-function CustomXAxisTick(props) {
-  const { x, y, payload, index, data } = props;
-  const { quarter, year } = data[index];
-
-  // Decide if/where to show the year label
-  let showYear = false;
-  let displayYear = "";
-  if (index === 2) {
-    showYear = true;
-    displayYear = "2023";
-  } else if (index === 5) {
-    showYear = true;
-    displayYear = "2024";
-  }
-
-  return (
-    <g transform={`translate(${x},${y})`}>
-      <text
-        x={0}
-        y={0}
-        dy={10}
-        fill="#fff"
-        textAnchor="middle"
-        style={{ fontSize: "0.9rem" }}
-      >
-        {quarter}
-      </text>
-      {showYear && (
-        <text
-          x={0}
-          y={0}
-          dx={-70}
-          dy={30}
-          fill="#fff"
-          textAnchor="middle"
-          style={{ fontSize: "0.9rem" }}
-        >
-          {displayYear}
-        </text>
-      )}
-    </g>
-  );
-}
+import XAxisInformation from "../components/XAxisInformation";
 
 export default class FUMChart extends PureComponent {
   state = {
-    data: [
-      { quarter: "Q1", year: 2023, fum: 30000 },
-      { quarter: "Q2", year: 2023, fum: 29000 },
-      { quarter: "Q3", year: 2023, fum: 31000 },
-      { quarter: "Q4", year: 2023, fum: 32000 },
-      { quarter: "Q1", year: 2024, fum: 33000 },
-      { quarter: "Q2", year: 2024, fum: 28000, isForecast: true },
-    ],
-    activeIndex: 0,
+    activeIndex: null,
   };
 
   handleClick = (_, index) => {
@@ -72,51 +21,46 @@ export default class FUMChart extends PureComponent {
   };
 
   render() {
-    const { data, activeIndex } = this.state;
-    const activeItem = data[activeIndex];
+    const { quarterlyFUM } = this.props;
+    const { activeIndex } = this.state;
+    const customerRisk = this.props.customerRisk;
+
+    const filterKey = customerRisk === "all" ? "All" : customerRisk.name;
+
+    const data =
+      quarterlyFUM && quarterlyFUM.length
+        ? quarterlyFUM.filter((entry) => entry.name.startsWith(filterKey))
+        : [];
 
     return (
       <div
         style={{
-          backgroundColor: "#1D283A",
-          borderRadius: "8px",
           padding: "1rem",
-          color: "#fff",
-          width: "100%",
         }}
       >
-        <h3
-          style={{
-            textAlign: "center",
-            fontSize: "1.2rem",
-          }}
-        >
+        <h3 className="text-white text-2xl font-bold mb-4 text-center">
           FUM per Kuartal
         </h3>
 
-        <ResponsiveContainer width="100%" height={300}>
+        <ResponsiveContainer height={300}>
           <BarChart
             data={data}
-            margin={{ top: 0, right: 20, left: 20, bottom: 20 }}
+            margin={{ top: 30, right: 50, left: 50, bottom: 20 }}
           >
             <XAxis
-              dataKey="quarter"
-              axisLine={false}
-              tickLine={false}
-              tick={<CustomXAxisTick data={data} />}
+              dataKey="name"
+              axisLine={true}
+              tickLine={true}
+              tick={<XAxisInformation data={data} />}
+              stroke="#FFFFFF"
+              interval={0}
             />
 
             <YAxis
-              tick={false}
-              axisLine={false}
-              label={{
-                value: "in Rp000",
-                angle: -90,
-                position: "insideLeft",
-                fill: "#fff",
-                dx: 80,
-                dy: 50,
-              }}
+              tick={true}
+              axisLine={true}
+              stroke="#FFFFFF"
+              // domain={[(dataMin) => Math.floor(dataMin * 2) * -1, "auto"]}
             />
 
             <Tooltip
@@ -125,19 +69,20 @@ export default class FUMChart extends PureComponent {
                 border: "none",
                 borderRadius: "1rem",
               }}
-              labelStyle={{ color:"black" }}
-              formatter={(val) => val.toLocaleString()}
+              labelStyle={{ color: "black" }}
+              formatter={(val) => [val.toLocaleString(), "FUM"]}
+              labelFormatter={() => ""}
             />
 
             <Bar
-              dataKey="fum"
+              dataKey="value"
               onClick={this.handleClick}
               barSize={50}
               radius={[8, 8, 0, 0]}
             >
               {data.map((entry, index) => {
-                const baseColor = entry.isForecast ? "#7f8c8d" : "#2ABC36";
-                const fillColor = index === activeIndex ? "#2ecc71" : baseColor;
+                const baseColor = entry.isForecast ? "#7f8c8d" : "#01ACD2";
+                const fillColor = index === activeIndex ? "#33C7E6" : baseColor;
                 return (
                   <Cell
                     key={`cell-${index}`}
@@ -149,13 +94,13 @@ export default class FUMChart extends PureComponent {
             </Bar>
           </BarChart>
         </ResponsiveContainer>
-
-        {/* <p style={{ marginTop: "1rem", textAlign: "center" }}>
-          {`FUM of "${activeItem.quarter} ${
-            activeItem.year
-          }" : ${activeItem.fum.toLocaleString()}`}
-        </p> */}
       </div>
     );
   }
 }
+
+FUMChart.propTypes = {
+  quarterlyFUM: PropTypes.array.isRequired,
+  customerRisk: PropTypes.string.isRequired,
+  setCustomerRisk: PropTypes.func.isRequired,
+};

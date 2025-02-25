@@ -9,12 +9,20 @@ export default function GaugeChart({ customerRisk, fbiData }) {
         : fbiData.find((item) => item.name === customerRisk.name);
     return fbiValue ? fbiValue.value : 0;
   })();
-  const targetValue = 600000;
+  const targetValue = 800000;
 
   // Two slices: "Completed" vs. "Remaining"
   const data = [
-    { name: "Completed", value: currentValue, color: "#01ACD2" },
-    { name: "Remaining", value: targetValue - currentValue, color: "#FFFFFF" },
+    {
+      name: "Completed",
+      value: currentValue > targetValue ? targetValue : currentValue,
+      color: "#01ACD2",
+    },
+    {
+      name: "Remaining",
+      value: currentValue >= targetValue ? 0 : targetValue - currentValue,
+      color: "#FFFFFF",
+    },
   ];
 
   // Dimensions for the chart
@@ -78,9 +86,14 @@ export default function GaugeChart({ customerRisk, fbiData }) {
           />
         </Pie>
         <Tooltip
-          formatter={(value) => `Rp ${value.toLocaleString()}`}
+          formatter={(value, name) => {
+            if (name === "Completed") {
+              return `Rp ${currentValue.toLocaleString()}`;
+            }
+            return `Rp ${(targetValue - currentValue).toLocaleString()}`;
+          }}
           contentStyle={{
-            background: "white",
+            background: "white", 
             border: "none",
             borderRadius: "4px",
             color: "black",

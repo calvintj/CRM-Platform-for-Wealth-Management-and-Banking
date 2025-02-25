@@ -42,11 +42,25 @@ const defaultColors = ["#F52720", "#01ACD2", "#2ABC36", "#FBB716", "#F0FF1B"];
 
 export default function RiskProfilePie({
   colors = defaultColors,
-  title = "Profil Risiko Nasabah",
   customerData,
   setCustomerRisk,
+  customerRisk,
 }) {
-  const [selectedIndex, setSelectedIndex] = React.useState(null);
+  const [selectedIndex, setSelectedIndex] = React.useState(() => {
+    // Initialize selectedIndex based on customerRisk if available
+    const riskIndex = customerData
+      .filter((entry) => entry.name !== "All")
+      .findIndex((entry) => entry.name === customerRisk?.name);
+    return riskIndex >= 0 ? riskIndex : null;
+  });
+
+  React.useEffect(() => {
+    // Update selectedIndex when customerRisk changes externally
+    const riskIndex = customerData
+      .filter((entry) => entry.name !== "All")
+      .findIndex((entry) => entry.name === customerRisk?.name);
+    setSelectedIndex(riskIndex >= 0 ? riskIndex : null);
+  }, [customerRisk, customerData]);
 
   if (
     customerData.length === 0 ||
@@ -58,26 +72,20 @@ export default function RiskProfilePie({
   return (
     <div
       style={{
-        borderRadius: "8px",
         padding: "1rem",
-        width: "100%",
-        color: "#fff",
       }}
-      role="region"
-      aria-label="Risk Profile Distribution Chart"
     >
       <h3
         style={{
           textAlign: "center",
-          margin: "0 0 1.2rem",
           fontSize: "1.5rem",
           fontWeight: "bold",
         }}
       >
-        {title}
+        Profil Risiko Nasabah
       </h3>
 
-      <ResponsiveContainer width="100%" aspect={1.5}>
+      <ResponsiveContainer aspect={1.4}>
         <PieChart
           onClick={() => {
             setSelectedIndex(null);
@@ -85,35 +93,35 @@ export default function RiskProfilePie({
           }}
         >
           <Pie
-            data={customerData}
-            cx="50%"
-            cy="50%"
-            innerRadius={70}
+            data={customerData.filter((entry) => entry.name !== "All")}
+            innerRadius={60}
             outerRadius={100}
             labelLine={false}
             label={renderCustomizedLabel}
             dataKey="value"
             paddingAngle={2}
           >
-            {customerData.map((entry, index) => (
-              <Cell
-                key={`cell-${index}`}
-                fill={
-                  selectedIndex === null || selectedIndex === index
-                    ? colors[index % colors.length]
-                    : "#808080"
-                } // Gray color for unselected items
-                stroke="none"
-                opacity={
-                  selectedIndex === null || selectedIndex === index ? 1 : 0.3
-                }
-                onClick={(e) => {
-                  e.stopPropagation();
-                  setCustomerRisk({ name: entry.name, value: entry.value });
-                  setSelectedIndex(index === selectedIndex ? null : index);
-                }}
-              />
-            ))}
+            {customerData
+              .filter((entry) => entry.name !== "All")
+              .map((entry, index) => (
+                <Cell
+                  key={`cell-${index}`}
+                  fill={
+                    selectedIndex === null || selectedIndex === index
+                      ? colors[index % colors.length]
+                      : "#808080"
+                  }
+                  stroke="none"
+                  opacity={
+                    selectedIndex === null || selectedIndex === index ? 1 : 0.3
+                  }
+                  onClick={(e) => {
+                    e.stopPropagation();
+                    setCustomerRisk({ name: entry.name, value: entry.value });
+                    setSelectedIndex(index === selectedIndex ? null : index);
+                  }}
+                />
+              ))}
           </Pie>
           <Tooltip
             formatter={(value) => `${value} customers`}
@@ -142,4 +150,11 @@ RiskProfilePie.propTypes = {
   title: PropTypes.string,
   setCustomerRisk: PropTypes.func,
   customerData: PropTypes.arrayOf(PropTypes.object),
+  customerRisk: PropTypes.oneOfType([
+    PropTypes.string,
+    PropTypes.shape({
+      name: PropTypes.string,
+      value: PropTypes.number,
+    }),
+  ]),
 };

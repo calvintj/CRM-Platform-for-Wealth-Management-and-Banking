@@ -1,33 +1,47 @@
-// PieChart.js
 import { PieChart as RePieChart, Pie, Cell, Label } from "recharts";
 import PropTypes from "prop-types";
 
 export default function GaugeChart({ customerData, customerRisk }) {
-  const currentValue =
-    customerRisk?.value || customerData.reduce((sum, item) => sum + item.value, 0);
+  const currentValue = (() => {
+    const customerValue =
+      customerRisk === "all"
+        ? customerData.find((item) => item.name === "All")
+        : customerData.find((item) => item.name === customerRisk.name);
+    return customerValue ? customerValue.value : 0;
+  })();
   const targetValue = 500;
 
-  // Two slices: "Completed" vs. "Remaining"
   const data = [
-    { name: "Completed", value: currentValue, color: "#F52720" },
-    { name: "Remaining", value: targetValue - currentValue, color: "#FFFFFF" },
+    {
+      name: "Completed",
+      value: currentValue > targetValue ? targetValue : currentValue,
+      color: "#F52720",
+    },
+    {
+      name: "Remaining",
+      value: currentValue >= targetValue ? 0 : targetValue - currentValue,
+      color: "#FFFFFF",
+    },
   ];
 
-  // Dimensions for the chart
-  const chartWidth = 300;
-  const chartHeight = 150;
+  const chartWidth = Math.min(300, window.innerWidth * 0.8);
+  const chartHeight = chartWidth * 0.5;
 
-  // Center x/y
-  const cx = 150; // half of chartWidth
-  const cy = 105; // lower this if you see it's cut off
+  const cx = chartWidth / 2;
+  const cy = chartHeight * 0.7;
 
-  const innerRadius = 75;
-  const outerRadius = 95;
+  const innerRadius = chartWidth * 0.25;
+  const outerRadius = chartWidth * 0.32;
 
   return (
-    <div className="flex flex-col items-center justify-center">
+    <div className="flex flex-col items-center justify-center w-full">
       {/* Title above the chart */}
-      <div className="text-white font-semibold mt-4" style={{ fontSize: "1.5rem" }}>Jumlah Nasabah</div>
+      <div
+        className="text-white font-semibold mt-4"
+        style={{ fontSize: "clamp(1rem, 4vw, 1.5rem)" }}
+      >
+        Jumlah Nasabah
+      </div>
 
       <RePieChart width={chartWidth} height={chartHeight}>
         <Pie
@@ -51,7 +65,7 @@ export default function GaugeChart({ customerData, customerRisk }) {
             dy={-10}
             style={{
               fill: "#FFFFFF",
-              fontSize: "24px",
+              fontSize: `${chartWidth * 0.08}px`,
               fontWeight: "bold",
               textAnchor: "middle",
             }}
@@ -63,7 +77,7 @@ export default function GaugeChart({ customerData, customerRisk }) {
             dy={20}
             style={{
               fill: "#CCCCCC",
-              fontSize: "14px",
+              fontSize: `${chartWidth * 0.047}px`,
               textAnchor: "middle",
             }}
           />
@@ -74,10 +88,19 @@ export default function GaugeChart({ customerData, customerRisk }) {
 }
 
 GaugeChart.propTypes = {
-  customerRisk: PropTypes.shape({
-    value: PropTypes.shape({
-      all: PropTypes.number,
+  customerRisk: PropTypes.oneOfType([
+    PropTypes.string,
+    PropTypes.shape({
+      name: PropTypes.string,
+      value: PropTypes.shape({
+        all: PropTypes.number,
+      }),
     }),
-  }),
-  customerData: PropTypes.arrayOf(PropTypes.object),
+  ]),
+  customerData: PropTypes.arrayOf(
+    PropTypes.shape({
+      name: PropTypes.string,
+      value: PropTypes.number,
+    })
+  ),
 };

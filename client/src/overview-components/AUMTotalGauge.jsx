@@ -10,12 +10,20 @@ export default function GaugeChart({ aumData, customerRisk }) {
         : aumData.find((item) => item.name === customerRisk.name);
     return aumValue ? aumValue.value : 0;
   })();
-  const targetValue = 1000000000;
+  const targetValue = 500000000;
 
   // Two slices: "Completed" vs. "Remaining"
   const data = [
-    { name: "Completed", value: currentValue, color: "#2ABC36" },
-    { name: "Remaining", value: targetValue - currentValue, color: "#FFFFFF" },
+    {
+      name: "Completed",
+      value: currentValue > targetValue ? targetValue : currentValue,
+      color: "#2ABC36",
+    },
+    {
+      name: "Remaining",
+      value: currentValue >= targetValue ? 0 : targetValue - currentValue,
+      color: "#FFFFFF",
+    },
   ];
 
   // Dimensions for the chart
@@ -79,9 +87,14 @@ export default function GaugeChart({ aumData, customerRisk }) {
           />
         </Pie>
         <Tooltip
-          formatter={(value) => `Rp ${value.toLocaleString()}`}
+          formatter={(value, name) => {
+            if (name === "Completed") {
+              return `Rp ${currentValue.toLocaleString()}`;
+            }
+            return `Rp ${(targetValue - currentValue).toLocaleString()}`;
+          }}
           contentStyle={{
-            background: "white",
+            background: "white", 
             border: "none",
             borderRadius: "4px",
             color: "black",

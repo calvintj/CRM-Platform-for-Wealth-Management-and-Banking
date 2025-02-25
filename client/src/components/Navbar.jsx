@@ -1,4 +1,9 @@
-export default function Navbar() {
+import { Menu, MenuButton, MenuItem, MenuItems } from "@headlessui/react";
+import { ChevronDownIcon } from "@heroicons/react/20/solid";
+import PropTypes from "prop-types";
+
+export default function Navbar({ customerRisk, setCustomerRisk }) {
+
   return (
     <header
       className="flex items-center justify-between rounded-2xl p-2 mt-2 mr-2"
@@ -9,7 +14,90 @@ export default function Navbar() {
         className="flex items-center ml-2"
         style={{ fontSize: "1.2rem", fontWeight: "bold" }}
       >
-        
+        <div
+          style={{
+            display: "flex",
+            justifyContent: "space-between",
+            alignItems: "center",
+          }}
+        >
+          <div style={{ flex: 1 }}></div>
+          <div style={{ flex: 1, display: "flex", justifyContent: "flex-end" }}>
+            <Menu as="div" className="relative inline-block text-left">
+              <div>
+                <MenuButton className="inline-flex w-full justify-center gap-x-1.5 rounded-md bg-white px-3 py-2 text-sm font-semibold text-gray-900 ring-1 shadow-xs ring-gray-300 ring-inset hover:bg-gray-50">
+                  Risiko
+                  <ChevronDownIcon
+                    aria-hidden="true"
+                    className="-mr-1 size-5 text-gray-400"
+                  />
+                </MenuButton>
+              </div>
+
+              <MenuItems
+                transition
+                className="absolute right-0 z-10 mt-2 w-30 origin-top-right rounded-md bg-white ring-1 shadow-lg ring-black/5 transition focus:outline-hidden data-closed:scale-95 data-closed:transform data-closed:opacity-0 data-enter:duration-100 data-enter:ease-out data-leave:duration-75 data-leave:ease-in"
+              >
+                <div className="py-1">
+                  <MenuItem>
+                    <button
+                      type="button"
+                      onClick={() => setCustomerRisk({ name: "All" })}
+                      className="block w-full px-4 py-2 text-left text-sm text-gray-700 data-focus:bg-gray-100 data-focus:text-gray-900 data-focus:outline-hidden"
+                    >
+                      Overall
+                    </button>
+                  </MenuItem>
+                  <MenuItem>
+                    <button
+                      type="button"
+                      onClick={() => setCustomerRisk({ name: "Conservative" })}
+                      className="block w-full px-4 py-2 text-left text-sm text-gray-700 data-focus:bg-gray-100 data-focus:text-gray-900 data-focus:outline-hidden"
+                    >
+                      Conservative
+                    </button>
+                  </MenuItem>
+                  <MenuItem>
+                    <button
+                      type="button"
+                      onClick={() => setCustomerRisk({ name: "Balanced" })}
+                      className="block w-full px-4 py-2 text-left text-sm text-gray-700 data-focus:bg-gray-100 data-focus:text-gray-900 data-focus:outline-hidden"
+                    >
+                      Balanced
+                    </button>
+                  </MenuItem>
+                  <MenuItem>
+                    <button
+                      type="button"
+                      onClick={() => setCustomerRisk({ name: "Moderate" })}
+                      className="block w-full px-4 py-2 text-left text-sm text-gray-700 data-focus:bg-gray-100 data-focus:text-gray-900 data-focus:outline-hidden"
+                    >
+                      Moderate
+                    </button>
+                  </MenuItem>
+                  <MenuItem>
+                    <button
+                      type="button"
+                      onClick={() => setCustomerRisk({ name: "Growth" })}
+                      className="block w-full px-4 py-2 text-left text-sm text-gray-700 data-focus:bg-gray-100 data-focus:text-gray-900 data-focus:outline-hidden"
+                    >
+                      Growth
+                    </button>
+                  </MenuItem>
+                  <MenuItem>
+                    <button
+                      type="button"
+                      onClick={() => setCustomerRisk({ name: "Aggressive" })}
+                      className="block w-full px-4 py-2 text-left text-sm text-gray-700 data-focus:bg-gray-100 data-focus:text-gray-900 data-focus:outline-hidden"
+                    >
+                      Aggressive
+                    </button>
+                  </MenuItem>
+                </div>
+              </MenuItems>
+            </Menu>
+          </div>
+        </div>
       </div>
 
       {/* Right: Notification, Email, RM */}
@@ -55,3 +143,8 @@ export default function Navbar() {
     </header>
   );
 }
+
+Navbar.propTypes = {
+  customerRisk: PropTypes.object.isRequired,
+  setCustomerRisk: PropTypes.func.isRequired,
+};
