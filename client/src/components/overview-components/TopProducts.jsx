@@ -36,7 +36,7 @@ export default function TopProducts({ topProducts, customerRisk }) {
       <h2 className="text-white text-2xl font-bold mb-4 text-center">
         Produk Teratas
       </h2>
-      <ResponsiveContainer width="100%" height="100%">
+      <ResponsiveContainer width="90%" height={300}>
         <BarChart
           data={data}
           layout="vertical"
