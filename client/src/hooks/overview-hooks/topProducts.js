@@ -11,17 +11,17 @@ export function useTopProducts(customerRisk) {
         let filteredData = [];
 
         // Filter data based on customerRisk
-        if (customerRisk === "all") {
+        if (customerRisk === "All") {
           filteredData = data.all;
-        } else if (customerRisk.name === "Conservative") {
+        } else if (customerRisk === "Conservative") {
           filteredData = data.conservative;
-        } else if (customerRisk.name === "Balanced") {
+        } else if (customerRisk === "Balanced") {
           filteredData = data.balanced;
-        } else if (customerRisk.name === "Moderate") {
+        } else if (customerRisk === "Moderate") {
           filteredData = data.moderate;
-        } else if (customerRisk.name === "Growth") {
+        } else if (customerRisk === "Growth") {
           filteredData = data.growth;
-        } else if (customerRisk.name === "Aggressive") {
+        } else if (customerRisk === "Aggressive") {
           filteredData = data.aggressive;
         }
 

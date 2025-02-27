@@ -16,7 +16,7 @@ export default function TopProducts({ topProducts, customerRisk }) {
   const data = topProducts
     .filter((item) => {
       // For "all", we filter items with the "All" category.
-      if (riskCategory === "all") {
+      if (riskCategory === "All") {
         return item.category === "All";
       }
       return item.category === riskCategory;
@@ -25,11 +25,6 @@ export default function TopProducts({ topProducts, customerRisk }) {
       name: item.product,
       value: item.amount,
     }));
-
-  // Debug logs for troubleshooting
-  console.log("customerRisk:", customerRisk);
-  console.log("topProducts:", topProducts);
-  console.log("processed data:", data);
 
   return (
     <div className="p-4 flex flex-col items-center justify-center">

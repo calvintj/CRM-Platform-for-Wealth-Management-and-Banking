@@ -35,7 +35,7 @@ export default function Navbar({ setCustomerRisk }) {
                 <MenuItem>
                   <button
                     type="button"
-                    onClick={() => setCustomerRisk({ name: "All" })}
+                    onClick={() => setCustomerRisk("All")}
                     className="block w-full px-4 py-2 text-left text-sm data-focus:bg-gray-100 data-focus:text-gray-900 data-focus:outline-hidden"
                   >
                     Overall
@@ -44,7 +44,7 @@ export default function Navbar({ setCustomerRisk }) {
                 <MenuItem>
                   <button
                     type="button"
-                    onClick={() => setCustomerRisk({ name: "Conservative" })}
+                    onClick={() => setCustomerRisk("Conservative")}
                     className="block w-full px-4 py-2 text-left text-sm data-focus:bg-gray-100 data-focus:text-gray-900 data-focus:outline-hidden"
                   >
                     Conservative
@@ -53,7 +53,7 @@ export default function Navbar({ setCustomerRisk }) {
                 <MenuItem>
                   <button
                     type="button"
-                    onClick={() => setCustomerRisk({ name: "Balanced" })}
+                    onClick={() => setCustomerRisk("Balanced")}
                     className="block w-full px-4 py-2 text-left text-sm data-focus:bg-gray-100 data-focus:text-gray-900 data-focus:outline-hidden"
                   >
                     Balanced
@@ -62,7 +62,7 @@ export default function Navbar({ setCustomerRisk }) {
                 <MenuItem>
                   <button
                     type="button"
-                    onClick={() => setCustomerRisk({ name: "Moderate" })}
+                    onClick={() => setCustomerRisk("Moderate")}
                     className="block w-full px-4 py-2 text-left text-sm data-focus:bg-gray-100 data-focus:text-gray-900 data-focus:outline-hidden"
                   >
                     Moderate
@@ -71,7 +71,7 @@ export default function Navbar({ setCustomerRisk }) {
                 <MenuItem>
                   <button
                     type="button"
-                    onClick={() => setCustomerRisk({ name: "Growth" })}
+                    onClick={() => setCustomerRisk("Growth")}
                     className="block w-full px-4 py-2 text-left text-sm data-focus:bg-gray-100 data-focus:text-gray-900 data-focus:outline-hidden"
                   >
                     Growth
@@ -80,7 +80,7 @@ export default function Navbar({ setCustomerRisk }) {
                 <MenuItem>
                   <button
                     type="button"
-                    onClick={() => setCustomerRisk({ name: "Aggressive" })}
+                    onClick={() => setCustomerRisk("Aggressive")}
                     className="block w-full px-4 py-2 text-left text-sm data-focus:bg-gray-100 data-focus:text-gray-900 data-focus:outline-hidden"
                   >
                     Aggressive

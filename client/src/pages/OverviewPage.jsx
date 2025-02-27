@@ -23,7 +23,7 @@ import { useTopProducts } from "../hooks/overview-hooks/topProducts";
 // PAGE
 export default function OverviewPage() {
   // STATE
-  const [customerRisk, setCustomerRisk] = useState("all");
+  const [customerRisk, setCustomerRisk] = useState("All");
 
   // HOOKS
   const [customerData] = useTotalCustomer(customerRisk);

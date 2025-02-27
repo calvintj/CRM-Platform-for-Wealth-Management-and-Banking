@@ -17,7 +17,7 @@ export default class FBIBar extends PureComponent {
     const { quarterlyFBI } = this.props;
     const customerRisk = this.props.customerRisk;
 
-    const filterKey = customerRisk === "all" ? "All" : customerRisk.name;
+    const filterKey = customerRisk === "All" ? "All" : customerRisk;
     const data =
       quarterlyFBI && quarterlyFBI.length
         ? quarterlyFBI.filter((entry) => entry.name.startsWith(filterKey))

@@ -66,14 +66,14 @@ export default function RiskProfilePie({
   const [selectedIndex, setSelectedIndex] = React.useState(() => {
     const riskIndex = customerData
       .filter((entry) => entry.name !== "All")
-      .findIndex((entry) => entry.name === customerRisk?.name);
+      .findIndex((entry) => entry.name === customerRisk);
     return riskIndex >= 0 ? riskIndex : null;
   });
 
   React.useEffect(() => {
     const riskIndex = customerData
       .filter((entry) => entry.name !== "All")
-      .findIndex((entry) => entry.name === customerRisk?.name);
+      .findIndex((entry) => entry.name === customerRisk);
     setSelectedIndex(riskIndex >= 0 ? riskIndex : null);
   }, [customerRisk, customerData]);
 
@@ -86,7 +86,7 @@ export default function RiskProfilePie({
         <PieChart
           onClick={() => {
             setSelectedIndex(null);
-            setCustomerRisk("all");
+            setCustomerRisk("All");
           }}
         >
           <Pie
@@ -117,10 +117,7 @@ export default function RiskProfilePie({
                   }
                   onClick={(e) => {
                     e.stopPropagation();
-                    setCustomerRisk({
-                      name: entry.name,
-                      value: entry.value,
-                    });
+                    setCustomerRisk(entry.name);
                     setSelectedIndex(index === selectedIndex ? null : index);
                   }}
                 />

@@ -5,9 +5,9 @@ import PropTypes from "prop-types";
 export default function GaugeChart({ aumData, customerRisk }) {
   const currentValue = (() => {
     const aumValue =
-      customerRisk === "all"
+      customerRisk === "All"
         ? aumData.find((item) => item.name === "All")
-        : aumData.find((item) => item.name === customerRisk.name);
+        : aumData.find((item) => item.name === customerRisk);
     return aumValue ? aumValue.value : 0;
   })();
   const targetValue = 500000000;

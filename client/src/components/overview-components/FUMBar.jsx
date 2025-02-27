@@ -46,7 +46,7 @@ export default class FUMChart extends PureComponent {
       ? { top: 20, right: 30, left: 30, bottom: 40 }
       : { top: 30, right: 50, left: 50, bottom: 50 };
 
-    const filterKey = customerRisk === "all" ? "All" : customerRisk.name;
+    const filterKey = customerRisk === "All" ? "All" : customerRisk;
 
     const data =
       quarterlyFUM && quarterlyFUM.length
