@@ -17,11 +17,13 @@ app.get('/', (req, res) => {
 const authRoutes = require('./routes/auth-routes');
 const overviewRoutes = require('./routes/overview-routes');
 const customerListRoutes = require('./routes/customer-list-routes');
+const customerDetailsRoutes = require('./routes/customer-details-routes');
 
 // Mount auth routes at /api/auth
 app.use('/api/auth', authRoutes);
 app.use('/api/overview', overviewRoutes);
 app.use('/api/customer-list', customerListRoutes);
+app.use('/api/customer-details', customerDetailsRoutes);
 
 // Start the server
 const PORT = process.env.PORT || 5000;

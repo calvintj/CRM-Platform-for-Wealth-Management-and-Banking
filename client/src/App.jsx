@@ -1,7 +1,7 @@
 import { Routes, Route } from "react-router-dom";
 import Login from "./pages/LoginPage.jsx";
 import Overview from "./pages/OverviewPage.jsx";
-import CustomerList from "./pages/CustomerList.jsx";
+import CustomerList from "./pages/CustomerListPage.jsx";
 import CustomerDetails from "./pages/CustomerDetailsPage.jsx";
 import TaskManager from "./pages/TaskManagerPage.jsx";
 import News from "./pages/NewsPage.jsx";

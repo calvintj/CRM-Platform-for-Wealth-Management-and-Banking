@@ -1,7 +1,6 @@
 const db = require("../config/db");
 
-const getTotalCustomer = async (rm_number, customerRisk) => {
-  if (customerRisk === "all") {
+const getTotalCustomer = async (rm_number) => {
     const result = await db.query(`
       SELECT 
         ra.rm_number,
@@ -25,11 +24,9 @@ const getTotalCustomer = async (rm_number, customerRisk) => {
       growth: parseInt(result.rows[0]?.growth || 0, 10),
       aggressive: parseInt(result.rows[0]?.aggressive || 0, 10),
     };
-  }
 };
 
-const getTotalAUM = async (rm_number, customerRisk) => {
-  if (customerRisk === "all") {
+const getTotalAUM = async (rm_number) => {
     const result = await db.query(`
       SELECT 
         ra.rm_number,
@@ -54,11 +51,9 @@ const getTotalAUM = async (rm_number, customerRisk) => {
       growth: parseFloat(result.rows[0]?.growth_aum || 0),
       aggressive: parseFloat(result.rows[0]?.aggressive_aum || 0),
     };
-  }
 };
 
-const getTotalFBI = async (rm_number, customerRisk) => {
-  if (customerRisk === "all") {
+const getTotalFBI = async (rm_number) => {
     const result = await db.query(`
     SELECT 
       ra.rm_number,
@@ -89,11 +84,9 @@ const getTotalFBI = async (rm_number, customerRisk) => {
       growth: parseFloat(result.rows[0]?.growth_fbi || 0),
       aggressive: parseFloat(result.rows[0]?.aggressive_fbi || 0),
     };
-  }
 };
 
-const getQuarterlyFUM = async (rm_number, customerRisk) => {
-  if (customerRisk === "all") {
+const getQuarterlyFUM = async (rm_number) => {
     const result = await db.query(`
     WITH quarterly_fum AS (
     SELECT 
@@ -193,11 +186,9 @@ const getQuarterlyFUM = async (rm_number, customerRisk) => {
         },
       },
     }));
-  }
 };
 
-const getQuarterlyFBI = async (rm_number, customerRisk) => {
-  if (customerRisk === "all") {
+const getQuarterlyFBI = async (rm_number) => {
     const result = await db.query(`
     WITH quarterly_fbi AS (
     SELECT 
@@ -298,20 +289,9 @@ const getQuarterlyFBI = async (rm_number, customerRisk) => {
         },
       },
     }));
-  }
 };
 
 const getTopProducts = async (rm_number, customerRisk) => {
-  // Map display risk names to the database’s risk_profile values
-  const riskMapping = {
-    Conservative: '1 - Conservative',
-    Balanced: '2 - Balanced',
-    Moderate: '3 - Moderate',
-    Growth: '4 - Growth',
-    Aggressive: '5 - Aggressive'
-  };
-
-  if (customerRisk === "all") {
     const result = await db.query(
       `
       WITH all_products AS (
@@ -425,41 +405,7 @@ const getTopProducts = async (rm_number, customerRisk) => {
           category: "Aggressive",
         })),
     };
-  } else {
-    // For a specific risk, determine the matching risk_profile value
-    const riskCategory = riskMapping[customerRisk.name];
-    if (!riskCategory) {
-      throw new Error("Invalid customer risk category");
-    }
-    const result = await db.query(
-      `
-      SELECT
-        ra.rm_number,
-        ht.nama_produk,
-        SUM(ht.jumlah_amount) AS total_amount
-      FROM historical_transaction ht
-      JOIN customer_info ci 
-        ON ht.bp_number_wm_core = ci.bp_number_wm_core
-      JOIN rm_account ra 
-        ON ci.assigned_rm = ra.rm_number
-      WHERE ci.risk_profile <> '0'
-        AND ra.rm_number = '${rm_number}'
-        AND ci.risk_profile = '${riskCategory}'
-      GROUP BY ra.rm_number, ht.nama_produk
-      ORDER BY total_amount DESC
-      LIMIT 5;
-      `
-    );
-    return {
-      [customerRisk.name.toLowerCase()]: result.rows.map((row) => ({
-        product: row.nama_produk,
-        amount: parseFloat(row.total_amount || 0),
-        category: customerRisk.name,
-      })),
-    };
-  }
 };
-
 
 module.exports = {
   getTotalCustomer,

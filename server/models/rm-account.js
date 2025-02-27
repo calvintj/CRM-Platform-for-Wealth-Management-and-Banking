@@ -14,11 +14,13 @@ const createAccount = async (email, hashedPassword) => {
   await db.query(queryText, [email, hashedPassword]);
 };
 
+// Update user
 const updateAccount = async (rm_number, email) => {
   const queryText = "UPDATE rm_account SET email = $1 WHERE rm_number = $2";
   await db.query(queryText, [email, rm_number]);
 };
 
+// Update password
 const updatePassword = async (email, hashedPassword) => {
   const queryText =
     "UPDATE rm_account SET password_hash = $1 WHERE LOWER(email) = LOWER($2)";
