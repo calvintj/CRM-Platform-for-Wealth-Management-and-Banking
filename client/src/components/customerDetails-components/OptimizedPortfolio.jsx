@@ -8,7 +8,9 @@ import {
   Legend,
   Tooltip,
 } from "recharts";
-import useCustomerPortfolio from "../../hooks/customerDetails-hook/customerPortfolio";
+
+// HOOKS
+import useOptimizedPortfolio from "../../hooks/customerDetails-hook/optimizedPortfolio";
 
 const RADIAN = Math.PI / 180;
 
@@ -53,7 +55,9 @@ export default function PortfolioPie({ colors = defaultColors, customerID }) {
   const outerRadius = isMobile ? 70 : 100;
   const chartAspect = isMobile ? 1 : 1.8;
 
-  const { transformedData, loading, error } = useCustomerPortfolio(customerID);
+  const { transformedData, loading, error } = useOptimizedPortfolio(customerID);
+
+  
 
   if (loading) {
     return (
@@ -82,11 +86,9 @@ export default function PortfolioPie({ colors = defaultColors, customerID }) {
   return (
     <div className="p-4">
       <p className="text-center text-xl md:text-2xl font-bold">
-        Portofolio Nasabah
+        Portofolio Optimal
       </p>
-      <p className="text-center text-xl text-gray-400">
-        Berdasarkan Tipe Aset
-      </p>
+      <p className="text-center text-xl text-gray-400">Berdasarkan Tipe Aset</p>
       <ResponsiveContainer width="100%" aspect={chartAspect}>
         <PieChart margin={{ top: 0, right: 0, bottom: 0, left: 0 }}>
           <Pie
@@ -128,7 +130,6 @@ export default function PortfolioPie({ colors = defaultColors, customerID }) {
           />
         </PieChart>
       </ResponsiveContainer>
-      
     </div>
   );
 }

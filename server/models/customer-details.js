@@ -76,4 +76,44 @@ const getCustomerDetails = async (rm_number, customerID) => {
   return result.rows[0];
 };
 
-module.exports = { getCustomerIDList, getCustomerDetails };
+const getCustomerPortfolio = async (rm_number, customerID) => {
+  const result = await db.query(`
+SELECT ca.casa, ca.sb, ca.deposito, ca.rd FROM current_allocation ca
+JOIN customer_info ci ON ca.bp_number_wm_core = ci.bp_number_wm_core
+WHERE ca.bp_number_wm_core = '${customerID}' AND ci.assigned_rm = '${rm_number}'
+ORDER BY ca.year DESC, ca.quarter DESC
+LIMIT 1;
+  `);
+  return result.rows;
+};
+
+const getOptimizedPortfolio = async (rm_number, customerID) => {
+  const result = await db.query(`
+SELECT oa.bp_number_wm_core, oa.asset_type, oa.recommended_allocation, ci.assigned_rm
+FROM optimized_allocation oa
+JOIN customer_info ci ON oa.bp_number_wm_core = ci.bp_number_wm_core
+WHERE ci.assigned_rm = '${rm_number}' 
+  AND oa.bp_number_wm_core = '${customerID}'
+ORDER BY oa.bp_number_wm_core ASC;
+  `);
+  return result.rows;
+};
+
+const getOwnedProduct = async (rm_number, customerID) => {
+  const result = await db.query(`
+    SELECT nama_produk, keterangan, jumlah_amount, price_bought, jumlah_transaksi, profit, return_value
+FROM historical_transaction ht
+JOIN customer_info ci ON ht.bp_number_wm_core = ci.bp_number_wm_core
+WHERE ci.assigned_rm = '${rm_number}' AND ht.bp_number_wm_core = '${customerID}'
+ORDER BY transaction_id DESC 
+  `);
+  return result.rows;
+};
+
+module.exports = {
+  getCustomerIDList,
+  getCustomerDetails,
+  getCustomerPortfolio,
+  getOptimizedPortfolio,
+  getOwnedProduct,
+};

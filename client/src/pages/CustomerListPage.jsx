@@ -4,7 +4,12 @@ import Navbar from "../components/Navbar";
 import StackedBarChart from "../components/customerList-components/StackedBarChart";
 import CustomerListTable from "../components/customerList-components/CustomerListTable";
 
+// HOOKS
+import { useState } from "react";
+
 export default function CustomerListPage() {
+  const [propensity, setPropensity] = useState("All");
+  const [aum, setAum] = useState("All");
   return (
     <div className="flex min-h-screen bg-gray-900 text-gray-200">
       <Sidebar />
@@ -16,12 +21,12 @@ export default function CustomerListPage() {
         <main className="grid grid-rows gap-2 flex-1 overflow-y-auto mr-2 my-2">
           {/* Stacked Bar Chart */}
           <div className="grid rounded-2xl bg-[#1D283A]">
-            <StackedBarChart />
+            <StackedBarChart setPropensity={setPropensity} setAum={setAum} />
           </div>
 
           {/* Customer List Table */}
           <div className="grid rounded-2xl overflow-x-auto h-[300px]">
-            <CustomerListTable />
+            <CustomerListTable propensity={propensity} aum={aum} />
           </div>
         </main>
       </div>

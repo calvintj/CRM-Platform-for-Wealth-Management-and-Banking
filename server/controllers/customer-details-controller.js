@@ -1,4 +1,10 @@
-const { getCustomerIDList, getCustomerDetails } = require("../models/customer-details");
+const {
+  getCustomerIDList,
+  getCustomerDetails,
+  getCustomerPortfolio,
+  getOptimizedPortfolio,
+  getOwnedProduct,
+} = require("../models/customer-details");
 
 const getCustomerIDListController = async (req, res) => {
   const { rm_number } = req.query;
@@ -12,4 +18,28 @@ const getCustomerDetailsController = async (req, res) => {
   res.json(customerDetails);
 };
 
-module.exports = { getCustomerIDListController, getCustomerDetailsController };
+const getCustomerPortfolioController = async (req, res) => {
+  const { rm_number, customerID } = req.query;
+  const customerPortfolio = await getCustomerPortfolio(rm_number, customerID);
+  res.json(customerPortfolio);
+};
+
+const getOptimizedPortfolioController = async (req, res) => {
+  const { rm_number, customerID } = req.query;
+  const optimizedPortfolio = await getOptimizedPortfolio(rm_number, customerID);
+  res.json(optimizedPortfolio);
+};
+
+const getOwnedProductController = async (req, res) => {
+  const { rm_number, customerID } = req.query;
+  const ownedProduct = await getOwnedProduct(rm_number, customerID);
+  res.json(ownedProduct);
+};
+
+module.exports = {
+  getCustomerIDListController,
+  getCustomerDetailsController,
+  getCustomerPortfolioController,
+  getOptimizedPortfolioController,
+  getOwnedProductController,
+};

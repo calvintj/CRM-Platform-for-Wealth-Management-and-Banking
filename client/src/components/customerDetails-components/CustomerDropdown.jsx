@@ -31,21 +31,21 @@ const CustomerDropdown = ({ customerID, setCustomerID }) => {
         // "right-0" ensures the right edge of the dropdown options aligns with the button's right edge.
         <MenuItems className="absolute right-0 z-10 mt-2 w-70 origin-top-right rounded-md border border-white shadow-lg bg-[#1D283A] text-white focus:outline-none">
           <div className="py-1">
-            {customers.slice(0, 10).map((customer) => (
-              <MenuItem key={customer.ID}>
-                {({ active }) => (
-                  <button
-                    type="button"
-                    onClick={() => handleCustomerSelect(customer)}
-                    className={`block w-full px-4 py-2 text-left text-sm ${
-                      active ? "bg-gray-700 text-white" : "text-gray-300"
-                    }`}
-                  >
-                    {customer.ID}
-                  </button>
-                )}
-              </MenuItem>
-            ))}
+            <div className="max-h-60 overflow-y-auto">
+              {customers.map((customer) => (
+                <MenuItem key={customer.ID}>
+                  {() => (
+                    <button
+                      type="button"
+                      onClick={() => handleCustomerSelect(customer)}
+                      className="block w-full px-4 py-2 text-left text-sm data-focus:bg-gray-100 data-focus:text-gray-900 data-focus:outline-hidden"
+                    >
+                      {customer.ID}
+                    </button>
+                  )}
+                </MenuItem>
+              ))}
+            </div>
           </div>
         </MenuItems>
       )}

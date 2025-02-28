@@ -9,6 +9,7 @@ import { RxDashboard } from "react-icons/rx";
 import { FaListUl } from "react-icons/fa";
 import { IoPersonOutline } from "react-icons/io5";
 import { MdOutlineTaskAlt } from "react-icons/md";
+import { IoNewspaperOutline } from "react-icons/io5";
 import { RiRobot3Line } from "react-icons/ri";
 import { BiLogOut } from "react-icons/bi";
 
@@ -81,6 +82,15 @@ export default function Sidebar() {
           <MdOutlineTaskAlt className="text-4xl" />
         </NavLink>
 
+        {/* News */}
+        <NavLink
+          to="/news"
+          className={({ isActive }) =>
+            `${linkClass} ${isActive ? "bg-gray-700" : ""}`
+          }
+        >
+          <IoNewspaperOutline className="text-4xl" />
+        </NavLink>
         {/* Chatbot */}
         <NavLink
           to="/chatbot"

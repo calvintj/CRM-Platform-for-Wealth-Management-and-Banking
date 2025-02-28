@@ -24,8 +24,9 @@ ChartJS.register(
 
 // HOOKS
 import { useCustomerList } from "../../hooks/customerList-hooks/customerList";
+import PropTypes from "prop-types";
 
-const StackedBarChart = () => {
+const StackedBarChart = ({ setPropensity, setAum }) => {
   // Fetch customer data using a custom hook
   const customerList = useCustomerList();
 
@@ -112,8 +113,13 @@ const StackedBarChart = () => {
           count: actualCount,
         });
 
-        // Navigate to overview page
-        window.location.href = "/overview";
+        setPropensity(propensityCategory);
+        setAum(aumCategory);
+      } else {
+        // When clicking outside of a bar, set both filters to "All"
+        console.log("Clicked outside bars - resetting filters to All");
+        setPropensity("All");
+        setAum("All");
       }
     },
     plugins: {
@@ -168,6 +174,15 @@ const StackedBarChart = () => {
         max: 4,
         stepSize: 1,
         stacked: true,
+        title: {
+          display: true,
+          text: "Propensity",
+          color: "#FFFFFF",
+          font: {
+            size: 14,
+            weight: "bold",
+          },
+        },
         ticks: {
           callback: function (value) {
             // Show text labels at 1,2,3,4 if desired
@@ -192,8 +207,17 @@ const StackedBarChart = () => {
       },
       x: {
         stacked: true,
+        title: {
+          display: true,
+          text: "Assets Under Management (AUM)",
+          color: "#FFFFFF",
+          font: {
+            size: 14,
+            weight: "bold",
+          },
+        },
         ticks: {
-          color: "#FFFFFF", // Add this to make x-axis labels white
+          color: "#FFFFFF",
         },
         /* ... */
       },
@@ -205,9 +229,14 @@ const StackedBarChart = () => {
 
   return (
     <div className="w-full h-full p-4">
-      <Bar data={data} options={options} />
+      <Bar data={data} options={options} className="cursor-pointer" />
     </div>
   );
 };
 
 export default StackedBarChart;
+
+StackedBarChart.propTypes = {
+  setPropensity: PropTypes.func.isRequired,
+  setAum: PropTypes.func.isRequired,
+};

@@ -1,4 +1,5 @@
 const { getCustomerList } = require("../models/customer-list");
+const { getCertainCustomerList } = require("../models/customer-list");
 
 const getCustomerListController = async (req, res) => {
   const { rm_number } = req.query;
@@ -6,4 +7,10 @@ const getCustomerListController = async (req, res) => {
   res.json(customerList);
 };
 
-module.exports = { getCustomerListController };
+const getCertainCustomerListController = async (req, res) => {  
+  const { rm_number, propensity, aum } = req.query;
+  const customerList = await getCertainCustomerList(rm_number, propensity, aum);
+  res.json(customerList);
+};
+
+module.exports = { getCustomerListController, getCertainCustomerListController };
