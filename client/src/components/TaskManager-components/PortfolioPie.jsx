@@ -8,7 +8,7 @@ import {
   Legend,
   Tooltip,
 } from "recharts";
-import useCustomerPortfolio from "../../hooks/customerDetails-hooks/customerPortfolio";
+import usePortfolio from "../../hooks/taskManager-hooks/getPortfolio";
 
 const RADIAN = Math.PI / 180;
 
@@ -40,7 +40,7 @@ const renderCustomizedLabel = ({
 
 const defaultColors = ["#F52720", "#01ACD2", "#2ABC36", "#FBB716", "#F0FF1B"];
 
-export default function PortfolioPie({ colors = defaultColors, customerID }) {
+export default function PortfolioPie({ colors = defaultColors }) {
   const [windowWidth, setWindowWidth] = React.useState(window.innerWidth);
   React.useEffect(() => {
     const handleResize = () => setWindowWidth(window.innerWidth);
@@ -53,7 +53,7 @@ export default function PortfolioPie({ colors = defaultColors, customerID }) {
   const outerRadius = isMobile ? 70 : 100;
   const chartAspect = isMobile ? 1 : 1.8;
 
-  const { transformedData, loading, error } = useCustomerPortfolio(customerID);
+  const { transformedData, loading, error } = usePortfolio();
 
   if (loading) {
     return (
@@ -81,10 +81,9 @@ export default function PortfolioPie({ colors = defaultColors, customerID }) {
 
   return (
     <div className="p-4">
-      <p className="text-center text-xl md:text-2xl font-bold">
-        Portofolio Nasabah
+      <p className="text-xl md:text-2xl font-bold">
+        Ringkasan Portofolio
       </p>
-      <p className="text-center text-xl text-gray-400">Berdasarkan Tipe Aset</p>
       <ResponsiveContainer width="100%" aspect={chartAspect}>
         <PieChart margin={{ top: 0, right: 0, bottom: 0, left: 0 }}>
           <Pie

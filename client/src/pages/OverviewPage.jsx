@@ -45,11 +45,14 @@ export default function OverviewPage() {
         <Navbar customerRisk={customerRisk} setCustomerRisk={setCustomerRisk} />
 
         {/* DASHBOARD CONTENT */}
-        <main className="grid gap-2 flex-1 overflow-y-auto mr-2 my-2">
+        <main className="flex flex-col gap-2 flex-1 overflow-y-auto mr-2 my-2">
           {/* Total Customer, AUM, and FBI */}
-          <div className="grid grid-cols-1 md:grid-cols-3 gap-2">
+          <div className="flex flex-col md:flex-row gap-2">
             {/* Total Customer */}
-            <div className="rounded-2xl" style={{ backgroundColor: "#1D283A" }}>
+            <div
+              className="flex-1 rounded-2xl"
+              style={{ backgroundColor: "#1D283A" }}
+            >
               <TotalCustomer
                 customerRisk={customerRisk}
                 customerData={customerData}
@@ -57,31 +60,37 @@ export default function OverviewPage() {
             </div>
 
             {/* Total AUM */}
-            <div className="rounded-2xl" style={{ backgroundColor: "#1D283A" }}>
+            <div
+              className="flex-1 rounded-2xl"
+              style={{ backgroundColor: "#1D283A" }}
+            >
               <AUMTotal customerRisk={customerRisk} aumData={aumData} />
             </div>
 
             {/* Total FBI */}
-            <div className="rounded-2xl" style={{ backgroundColor: "#1D283A" }}>
+            <div
+              className="flex-1 rounded-2xl"
+              style={{ backgroundColor: "#1D283A" }}
+            >
               <FBITotal customerRisk={customerRisk} fbiData={fbiData} />
             </div>
           </div>
 
           {/* Quarterly FUM and Customer Overview */}
-          <div className="grid grid-cols-1 md:grid-cols-3 gap-2">
+          <div className="flex flex-col md:flex-row gap-2">
             {/* Quarterly FUM */}
             <div
-              className="rounded-2xl col-span-2"
+              className="flex-[2] rounded-2xl"
               style={{ backgroundColor: "#1D283A" }}
             >
-              <FUMBar
-                customerRisk={customerRisk}
-                quarterlyFUM={quarterlyFUM}
-              />
+              <FUMBar customerRisk={customerRisk} quarterlyFUM={quarterlyFUM} />
             </div>
 
             {/* Customer Overview */}
-            <div className="rounded-2xl" style={{ backgroundColor: "#1D283A" }}>
+            <div
+              className="flex-1 rounded-2xl"
+              style={{ backgroundColor: "#1D283A" }}
+            >
               <CustomerOverview
                 setCustomerRisk={setCustomerRisk}
                 customerData={customerData}
@@ -91,20 +100,20 @@ export default function OverviewPage() {
           </div>
 
           {/* Quarterly FBI and Top Products */}
-          <div className="grid grid-cols-1 md:grid-cols-3 gap-2">
+          <div className="flex flex-col md:flex-row gap-2">
             {/* Quarterly FBI */}
             <div
-              className="rounded-2xl col-span-2"
+              className="flex-[2] rounded-2xl"
               style={{ backgroundColor: "#1D283A" }}
             >
-              <FBIBar
-                customerRisk={customerRisk}
-                quarterlyFBI={quarterlyFBI}
-              />
+              <FBIBar customerRisk={customerRisk} quarterlyFBI={quarterlyFBI} />
             </div>
 
             {/* Top Products */}
-            <div className="rounded-2xl" style={{ backgroundColor: "#1D283A" }}>
+            <div
+              className="flex-1 rounded-2xl"
+              style={{ backgroundColor: "#1D283A" }}
+            >
               <TopProducts
                 customerRisk={customerRisk}
                 topProducts={topProducts}

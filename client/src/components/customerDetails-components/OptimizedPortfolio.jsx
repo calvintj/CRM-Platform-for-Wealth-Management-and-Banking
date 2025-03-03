@@ -10,7 +10,7 @@ import {
 } from "recharts";
 
 // HOOKS
-import useOptimizedPortfolio from "../../hooks/customerDetails-hook/optimizedPortfolio";
+import useOptimizedPortfolio from "../../hooks/customerDetails-hooks/optimizedPortfolio";
 
 const RADIAN = Math.PI / 180;
 
@@ -56,8 +56,6 @@ export default function PortfolioPie({ colors = defaultColors, customerID }) {
   const chartAspect = isMobile ? 1 : 1.8;
 
   const { transformedData, loading, error } = useOptimizedPortfolio(customerID);
-
-  
 
   if (loading) {
     return (

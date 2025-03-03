@@ -1,7 +1,7 @@
 // components/customerDetails-components/CustomerDropdown.jsx
 import { Menu, MenuButton, MenuItems, MenuItem } from "@headlessui/react";
 import { ChevronDownIcon } from "@heroicons/react/20/solid";
-import { useCustomerIDList } from "../../hooks/customerDetails-hook/customerIDList";
+import { useCustomerIDList } from "../../hooks/customerDetails-hooks/customerIDList";
 import PropTypes from "prop-types";
 
 const CustomerDropdown = ({ customerID, setCustomerID }) => {

@@ -1,5 +1,5 @@
 import PropTypes from "prop-types";
-import useOwnedProduct from "../../hooks/customerDetails-hook/ownedProduct";
+import useOwnedProduct from "../../hooks/customerDetails-hooks/ownedProduct";
 const OwnedProductTable = ({ customerID }) => {
   // Hook
   const { ownedProduct, loading, error } = useOwnedProduct(customerID);
@@ -65,7 +65,9 @@ const OwnedProductTable = ({ customerID }) => {
                       product.profit > 0 ? "text-green-500" : "text-red-500"
                     }
                   >
-                    {product.profit > 0 ? product.profit : `(${Math.abs(product.profit)})`}
+                    {product.profit > 0
+                      ? product.profit
+                      : `(${Math.abs(product.profit)})`}
                   </span>
                 </td>
                 <td className="whitespace-nowrap px-4 py-2 text-gray-700 dark:text-gray-200">

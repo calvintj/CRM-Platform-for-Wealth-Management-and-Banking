@@ -1,5 +1,5 @@
 import { useState } from "react";
-import { useCustomerDetails } from "../hooks/customerDetails-hook/customerDetails";
+import { useCustomerDetails } from "../hooks/customerDetails-hooks/customerDetails";
 
 // Components
 import Sidebar from "../components/Sidebar";
@@ -104,7 +104,7 @@ export default function CustomerDetailsPage() {
                 <h1 className="font-bold">FUM</h1>
                 <h1>
                   {data?.Total_FUM
-                    ? `Rp ${data.Total_FUM.toLocaleString("en-US")}`
+                    ? `Rp ${Number(data.Total_FUM).toLocaleString()}`
                     : "N/A"}
                 </h1>
               </div>
@@ -115,7 +115,11 @@ export default function CustomerDetailsPage() {
                 style={{ backgroundColor: "#1D283A" }}
               >
                 <h1 className="font-bold">AUM</h1>
-                <h1>{data?.Total_AUM || "N/A"}</h1>
+                <h1>
+                  {data?.Total_AUM
+                    ? `Rp ${Number(data.Total_AUM).toLocaleString()}`
+                    : "N/A"}
+                </h1>
               </div>
 
               {/* FBI */}
@@ -124,7 +128,11 @@ export default function CustomerDetailsPage() {
                 style={{ backgroundColor: "#1D283A" }}
               >
                 <h1 className="font-bold">FBI</h1>
-                <h1>{data?.Total_FBI || "N/A"}</h1>
+                <h1>
+                  {data?.Total_FBI
+                    ? `Rp ${Number(data.Total_FBI).toLocaleString()}`
+                    : "N/A"}
+                </h1>
               </div>
             </div>
 
@@ -167,7 +175,6 @@ export default function CustomerDetailsPage() {
               ></div>
             </div>
 
-           
             <div className="ml-2">
               <p className="font-bold">Kepemilikan Produk</p>
               <p className="text-sm text-gray-400">Kuartal Terakhir</p>
