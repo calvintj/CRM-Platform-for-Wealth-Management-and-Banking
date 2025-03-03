@@ -1,7 +1,6 @@
-// HOOKS
 import { useState } from "react";
-import useManagedNumbers from "../hooks/taskManager-hooks/getManagedNumbers";
-import useIncreasedNumbers from "../hooks/taskManager-hooks/getIncreasedNumbers";
+import useManagedNumbers from "../hooks/taskManager-hooks/ManagedNumbers";
+import useIncreasedNumbers from "../hooks/taskManager-hooks/IncreasedNumbers";
 
 // COMPONENTS
 import Sidebar from "../components/Sidebar";
@@ -10,14 +9,17 @@ import Calendar from "../components/Calendar";
 import TaskManager from "../components/TaskManager";
 import PortfolioPie from "../components/TaskManager-components/PortfolioPie";
 import LastTransaction from "../components/TaskManager-components/LastTransaction";
+import PotentialTransaction from "../components/TaskManager-components/PotentialTransaction";
 
 // ASSETS
 import { ArrowUpIcon, ArrowDownIcon } from "@heroicons/react/24/outline";
+import { ChevronLeftIcon, ChevronRightIcon } from "@heroicons/react/24/solid";
 
 export default function TaskManagerPage() {
   const [selectedDate, setSelectedDate] = useState(new Date());
   const { managedNumbers, loading } = useManagedNumbers();
   const { increasedNumbers } = useIncreasedNumbers();
+
   const aumIncrease =
     ((increasedNumbers?.currentQuarter?.all_aum -
       increasedNumbers?.lastQuarter?.all_aum) /
@@ -33,6 +35,22 @@ export default function TaskManagerPage() {
       increasedNumbers?.lastQuarter?.all_customers) /
       increasedNumbers?.lastQuarter?.all_customers) *
     100;
+
+  // Pagination state
+  const [currentPage, setCurrentPage] = useState(0);
+  const [pageCount, setPageCount] = useState(0);
+
+  // Pagination handlers
+  const handlePrevPage = () => {
+    setCurrentPage((prev) => Math.max(0, prev - 1));
+  };
+
+  const handleNextPage = () => {
+    // Only go to the next page if we haven’t reached the last page
+    if (currentPage < pageCount - 1) {
+      setCurrentPage((prev) => prev + 1);
+    }
+  };
 
   if (loading) {
     return <div>Loading...</div>;
@@ -77,12 +95,18 @@ export default function TaskManagerPage() {
                 <div className="flex flex-row items-center">
                   <h1>
                     {managedNumbers?.all_aum
-                      ? `Rp ${Number(managedNumbers.all_aum).toLocaleString('id-ID')}`
+                      ? `Rp ${Number(managedNumbers.all_aum).toLocaleString(
+                          "id-ID"
+                        )}`
                       : "N/A"}
                   </h1>
                   <h1
                     className={`text-sm ${
-                      aumIncrease > 0 ? "text-green-500" : aumIncrease < 0 ? "text-red-500" : "text-orange-500"
+                      aumIncrease > 0
+                        ? "text-green-500"
+                        : aumIncrease < 0
+                        ? "text-red-500"
+                        : "text-orange-500"
                     } flex flex-row items-center`}
                   >
                     {aumIncrease > 0 ? (
@@ -100,12 +124,18 @@ export default function TaskManagerPage() {
                 <div className="flex flex-row">
                   <h1>
                     {managedNumbers?.all_fbi
-                      ? `Rp ${Number(managedNumbers.all_fbi).toLocaleString('id-ID')}`
+                      ? `Rp ${Number(managedNumbers.all_fbi).toLocaleString(
+                          "id-ID"
+                        )}`
                       : "N/A"}
                   </h1>
                   <h1
                     className={`text-sm ${
-                      fbiIncrease > 0 ? "text-green-500" : fbiIncrease < 0 ? "text-red-500" : "text-orange-500"
+                      fbiIncrease > 0
+                        ? "text-green-500"
+                        : fbiIncrease < 0
+                        ? "text-red-500"
+                        : "text-orange-500"
                     } flex flex-row items-center`}
                   >
                     {fbiIncrease > 0 ? (
@@ -138,7 +168,6 @@ export default function TaskManagerPage() {
                     ) : customerIncrease < 0 ? (
                       <ArrowDownIcon className="w-4 h-4" />
                     ) : (
-                      // Optionally, choose a neutral icon or leave it blank when the value is 0.
                       <span className="w-4 h-4" />
                     )}
                     {customerIncrease.toFixed(2)}%
@@ -155,8 +184,50 @@ export default function TaskManagerPage() {
                 <LastTransaction />
               </div>
             </div>
-            <p className="text-lg font-bold">Transaksi Potensial</p>
-            <div className="flex-1 rounded-2xl bg-[#1D283A]"></div>
+            <div className="flex flex-row gap-2 items-center">
+              <p className="text-lg font-bold">Transaksi Potensial</p>
+
+              <div className="flex justify-end items-center gap-2">
+                {/* Previous Button */}
+                <button
+                  onClick={handlePrevPage}
+                  disabled={currentPage === 0}
+                  className={`
+flex items-center justify-center
+w-8 h-8 rounded-full
+bg-gray-700 hover:bg-gray-600
+transition-colors duration-200
+${currentPage === 0 ? "opacity-50 cursor-not-allowed" : ""}
+`}
+                >
+                  <ChevronLeftIcon className="h-5 w-5 text-white cursor-pointer" />
+                </button>
+
+                {/* Next Button */}
+                <button
+                  onClick={handleNextPage}
+                  disabled={currentPage >= pageCount - 1}
+                  className={`
+flex items-center justify-center
+w-8 h-8 rounded-full
+bg-gray-700 hover:bg-gray-600
+transition-colors duration-200
+${currentPage >= pageCount - 1 ? "opacity-50 cursor-not-allowed" : ""}
+`}
+                >
+                  <ChevronRightIcon className="h-5 w-5 text-white cursor-pointer" />
+                </button>
+              </div>
+            </div>
+
+            <div className="flex-1 rounded-2xl bg-[#1D283A] flex flex-col">
+              {/* Pass the pagination state and updater */}
+              <PotentialTransaction
+                currentPage={currentPage}
+                setCurrentPage={setCurrentPage}
+                setPageCount={setPageCount}
+              />
+            </div>
           </div>
         </main>
       </div>

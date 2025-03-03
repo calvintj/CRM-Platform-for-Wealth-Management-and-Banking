@@ -3,6 +3,7 @@ const {
   getIncreasedNumbers,
   getPortfolio,
   getLastTransaction,
+  getPotentialTransaction,
 } = require("../models/task-manager");
 
 const getManagedNumbersController = async (req, res) => {
@@ -29,9 +30,16 @@ const getLastTransactionController = async (req, res) => {
     res.json(lastTransaction);
 }
 
+const getPotentialTransactionController = async (req, res) => {
+    const {rm_number} = req.query;
+    const potentialTransaction = await getPotentialTransaction(rm_number);
+    res.json(potentialTransaction);
+}
+
 module.exports = {
   getManagedNumbersController,
   getIncreasedNumbersController,
   getPortfolioController,
   getLastTransactionController,
+  getPotentialTransactionController,
 };

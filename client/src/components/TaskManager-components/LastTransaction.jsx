@@ -1,4 +1,4 @@
-import { useLastTransaction } from "../../hooks/taskManager-hooks/getLastTransaction";
+import { useLastTransaction } from "../../hooks/taskManager-hooks/LastTransaction";
 
 export default function LastTransaction() {
   const lastTransaction = useLastTransaction();
@@ -10,7 +10,7 @@ export default function LastTransaction() {
     <div className="p-4">
       <h1 className="font-bold text-2xl">Transaksi Terakhir</h1>
       <p className="text-gray-400">{currentDate}</p>
-      <table className="text-center w-full border-separate border-spacing-y-3.5">
+      <table className="divide-gray-900 text-center w-full border-separate border-spacing-y-3.5">
         <thead>
           <tr>
             <th>ID Nasabah</th>

@@ -8,7 +8,7 @@ import {
   Legend,
   Tooltip,
 } from "recharts";
-import usePortfolio from "../../hooks/taskManager-hooks/getPortfolio";
+import usePortfolio from "../../hooks/taskManager-hooks/Portfolio";
 
 const RADIAN = Math.PI / 180;
 

@@ -78,9 +78,21 @@ LIMIT 5;
   return result.rows;
 };
 
+const getPotentialTransaction = async (rm_number) => {
+    const result = await db.query(`
+      SELECT ht.bp_number_wm_core AS id_nasabah, ht.nama_produk, ht.profit
+  FROM historical_transaction ht
+  JOIN customer_info ci ON ht.bp_number_wm_core = ci.bp_number_wm_core
+  WHERE ci.assigned_rm = '${rm_number}'
+  ORDER BY transaction_id DESC 
+    `);
+    return result.rows;
+  };
+
 module.exports = {
   getManagedNumbers,
   getIncreasedNumbers,
   getPortfolio,
   getLastTransaction,
+  getPotentialTransaction,
 };
