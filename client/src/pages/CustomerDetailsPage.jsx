@@ -104,7 +104,7 @@ export default function CustomerDetailsPage() {
                 <h1 className="font-bold">FUM</h1>
                 <h1>
                   {data?.Total_FUM
-                    ? `Rp ${Number(data.Total_FUM).toLocaleString()}`
+                    ? `Rp ${Number(data.Total_FUM).toLocaleString("id-ID")}`
                     : "N/A"}
                 </h1>
               </div>
@@ -117,7 +117,7 @@ export default function CustomerDetailsPage() {
                 <h1 className="font-bold">AUM</h1>
                 <h1>
                   {data?.Total_AUM
-                    ? `Rp ${Number(data.Total_AUM).toLocaleString()}`
+                    ? `Rp ${Number(data.Total_AUM).toLocaleString("id-ID")}`
                     : "N/A"}
                 </h1>
               </div>
@@ -130,7 +130,7 @@ export default function CustomerDetailsPage() {
                 <h1 className="font-bold">FBI</h1>
                 <h1>
                   {data?.Total_FBI
-                    ? `Rp ${Number(data.Total_FBI).toLocaleString()}`
+                    ? `Rp ${Number(data.Total_FBI).toLocaleString("id-ID")}`
                     : "N/A"}
                 </h1>
               </div>

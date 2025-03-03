@@ -1,18 +1,13 @@
-import React, { useState } from "react";
+import { useState } from "react";
 import { format, addMonths, subMonths } from "date-fns";
 import id from "date-fns/locale/id";
+import PropTypes from "prop-types";
 
-const Calendar = ({ onDateSelect, selectedDate }) => {
-  const [currentMonth, setCurrentMonth] = useState(new Date());
+const Calendar = ({ setSelectedDate, selectedDate }) => {
+  const [currentMonth, setCurrentMonth] = useState(() => new Date());
 
   const daysShort = ["Min", "Sen", "Sel", "Rab", "Kam", "Jum", "Sab"];
 
-  // Start/end of the current month
-  const startOfMonth = new Date(
-    currentMonth.getFullYear(),
-    currentMonth.getMonth(),
-    1
-  );
   const endOfMonth = new Date(
     currentMonth.getFullYear(),
     currentMonth.getMonth() + 1,
@@ -69,7 +64,7 @@ const Calendar = ({ onDateSelect, selectedDate }) => {
               className={`cursor-pointer p-2 rounded-md hover:bg-blue-600
                 ${isSelected ? "bg-blue-500" : ""}
               `}
-              onClick={() => onDateSelect(date)}
+              onClick={() => setSelectedDate(date)}
             >
               {format(date, "d")}
             </div>
@@ -81,3 +76,8 @@ const Calendar = ({ onDateSelect, selectedDate }) => {
 };
 
 export default Calendar;
+
+Calendar.propTypes = {
+  setSelectedDate: PropTypes.func.isRequired,
+  selectedDate: PropTypes.instanceOf(Date).isRequired,
+};

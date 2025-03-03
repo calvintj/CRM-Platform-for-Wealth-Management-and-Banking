@@ -5,8 +5,8 @@ import useIncreasedNumbers from "../hooks/taskManager-hooks/IncreasedNumbers";
 // COMPONENTS
 import Sidebar from "../components/Sidebar";
 import Navbar from "../components/Navbar";
-import Calendar from "../components/Calendar";
-import TaskManager from "../components/TaskManager";
+import Calendar from "../components/TaskManager-components/Calendar";
+import TaskManager from "../components/TaskManager-components/TaskManager";
 import PortfolioPie from "../components/TaskManager-components/PortfolioPie";
 import LastTransaction from "../components/TaskManager-components/LastTransaction";
 import PotentialTransaction from "../components/TaskManager-components/PotentialTransaction";
@@ -81,7 +81,7 @@ export default function TaskManagerPage() {
               style={{ backgroundColor: "#1D283A" }}
             >
               <Calendar
-                onDateSelect={setSelectedDate}
+                setSelectedDate={setSelectedDate}
                 selectedDate={selectedDate}
               />
             </div>

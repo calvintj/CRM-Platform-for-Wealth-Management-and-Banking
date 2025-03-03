@@ -125,7 +125,7 @@ const StackedBarChart = ({ setPropensity, setAum }) => {
     plugins: {
       title: {
         display: true,
-        text: "Customer Mapping",
+        text: "Pemetaan Nasabah",
         font: {
           size: 24,
         },

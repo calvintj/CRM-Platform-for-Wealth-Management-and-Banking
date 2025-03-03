@@ -1,6 +1,7 @@
-import React, { useState } from "react";
+import { useState } from "react";
 import { format } from "date-fns";
 import id from "date-fns/locale/id";
+import PropTypes from "prop-types";
 
 const TaskManager = ({ selectedDate }) => {
   // tasks is an object keyed by a date string like "YYYY-MM-DD".
@@ -52,3 +53,7 @@ const TaskManager = ({ selectedDate }) => {
 };
 
 export default TaskManager;
+
+TaskManager.propTypes = {
+  selectedDate: PropTypes.instanceOf(Date).isRequired,
+};
