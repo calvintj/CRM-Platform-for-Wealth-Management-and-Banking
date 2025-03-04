@@ -4,6 +4,8 @@ const {
   getPortfolio,
   getLastTransaction,
   getPotentialTransaction,
+  getTask,
+  postTask,
 } = require("../models/task-manager");
 
 const getManagedNumbersController = async (req, res) => {
@@ -25,16 +27,47 @@ const getPortfolioController = async (req, res) => {
 };
 
 const getLastTransactionController = async (req, res) => {
-    const {rm_number} = req.query;
-    const lastTransaction = await getLastTransaction(rm_number);
-    res.json(lastTransaction);
-}
+  const { rm_number } = req.query;
+  const lastTransaction = await getLastTransaction(rm_number);
+  res.json(lastTransaction);
+};
 
 const getPotentialTransactionController = async (req, res) => {
-    const {rm_number} = req.query;
-    const potentialTransaction = await getPotentialTransaction(rm_number);
-    res.json(potentialTransaction);
-}
+  const { rm_number } = req.query;
+  const potentialTransaction = await getPotentialTransaction(rm_number);
+  res.json(potentialTransaction);
+};
+
+const getTaskController = async (req, res) => {
+  const { rm_number } = req.query;
+  const task = await getTask(rm_number);
+  res.json(task);
+};
+
+const postTaskController = async (req, res) => {
+  // Destructure task properties from req.body (not wrapped in a "task" object)
+  const { description, invitee, due_date } = req.body;
+
+  // Get rm_number from the token payload attached by authMiddleware
+  const rm_number = req.user && req.user.rm_number;
+
+  if (!rm_number) {
+    return res.status(401).json({ error: "Unauthorized: missing token data" });
+  }
+
+  try {
+    const newTask = await postTask({
+      description,
+      invitee,
+      due_date,
+      rm_number,
+    });
+    res.json(newTask);
+  } catch (error) {
+    console.error("Error posting task:", error);
+    res.status(500).json({ error: "Failed to add task" });
+  }
+};
 
 module.exports = {
   getManagedNumbersController,
@@ -42,4 +75,6 @@ module.exports = {
   getPortfolioController,
   getLastTransactionController,
   getPotentialTransactionController,
+  getTaskController,
+  postTaskController,
 };

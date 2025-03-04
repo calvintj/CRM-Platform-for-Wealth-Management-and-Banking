@@ -95,7 +95,6 @@ export default function PortfolioPie({ colors = defaultColors, customerID }) {
             label={renderCustomizedLabel}
             dataKey="value"
             paddingAngle={2}
-            cursor="pointer"
           >
             {transformedData.map((entry, index) => (
               <Cell

@@ -5,9 +5,15 @@ import { useCustomerDetails } from "../hooks/customerDetails-hooks/customerDetai
 import Sidebar from "../components/Sidebar";
 import Navbar from "../components/Navbar";
 import CustomerDropdown from "../components/customerDetails-components/CustomerDropdown";
+import RecommendationProduct from "../components/customerDetails-components/RecommendationProduct";
 import PortfolioPie from "../components/customerDetails-components/PortfolioPie";
 import OptimizedPortfolio from "../components/customerDetails-components/OptimizedPortfolio";
 import OwnedProductTable from "../components/customerDetails-components/OwnedProductTable";
+import ActivityManager from "../components/customerDetails-components/ActivityManager";
+import { ArrowUpIcon, ArrowDownIcon } from "@heroicons/react/24/outline";
+
+// Hooks
+import useGetReturnPercentage from "../hooks/customerDetails-hooks/getReturnPercentage";
 
 // Icons
 import { GrOptimize } from "react-icons/gr";
@@ -17,9 +23,9 @@ export default function CustomerDetailsPage() {
   const [customerID, setCustomerID] = useState("1");
   const { data, loading } = useCustomerDetails(customerID);
   const [currentPortfolio, setCurrentPortfolio] = useState("current");
+  const { returnPercentage } = useGetReturnPercentage(customerID);
 
-  // Debug log
-  console.log("Customer data:", data);
+  console.log("returnPercentage", returnPercentage);
 
   return (
     <div className="flex h-screen bg-gray-900 text-gray-200">
@@ -90,7 +96,9 @@ export default function CustomerDetailsPage() {
             <div
               className="rounded-2xl flex-grow mb-2"
               style={{ backgroundColor: "#1D283A" }}
-            ></div>
+            >
+              <RecommendationProduct customerID={customerID} />
+            </div>
           </div>
 
           {/* Right Column - FUM, AUM, FBI and Portfolio */}
@@ -152,10 +160,50 @@ export default function CustomerDetailsPage() {
 
                 <div className="flex justify-between items-center px-4 pb-4">
                   <div className="flex flex-col">
-                    <p className="text-sm text-white">Expected Return</p>
-                    <p className="bg-[#01ACD2] text-black rounded-md text-center w-12 py-1">
-                      %
+                    <p className="text-sm text-white">
+                      {currentPortfolio === "current"
+                        ? "Current Return"
+                        : "Expected Return"}
                     </p>
+                    {currentPortfolio === "current" ? (
+                      <p className="bg-[#01ACD2] text-black rounded-md text-center w-12 py-1">
+                        {`${(
+                          Number(returnPercentage[0]?.current_return) * 100
+                        ).toFixed(0)}%`}
+                      </p>
+                    ) : (
+                      <div className="flex gap-2">
+                        <p className="bg-[#01ACD2] text-black rounded-md text-center w-12 py-1">
+                          {`${(
+                            Number(returnPercentage[0]?.expected_return) * 100
+                          ).toFixed(0)}%`}
+                        </p>
+                        <p
+                          className={`flex items-center justify-center rounded-md text-center w-12 py-1 ${
+                            (Number(returnPercentage[0]?.expected_return) -
+                              Number(returnPercentage[0]?.current_return)) *
+                              100 >
+                            0
+                              ? "text-green-500"
+                              : "text-red-500"
+                          }`}
+                        >
+                          {(Number(returnPercentage[0]?.expected_return) -
+                            Number(returnPercentage[0]?.current_return)) *
+                            100 >
+                          0 ? (
+                            <ArrowUpIcon className="w-4 h-4" />
+                          ) : (
+                            <ArrowDownIcon className="w-4 h-4" />
+                          )}
+                          {`${Math.abs(
+                            (Number(returnPercentage[0]?.expected_return) -
+                              Number(returnPercentage[0]?.current_return)) *
+                              100
+                          ).toFixed(0)}%`}
+                        </p>
+                      </div>
+                    )}
                   </div>
                   <GrOptimize
                     className="text-[#01ACD2] text-5xl border-2 border-[#01ACD2] rounded-md p-2 cursor-pointer transition-transform duration-300 ease-in-out hover:scale-105"
@@ -172,7 +220,9 @@ export default function CustomerDetailsPage() {
               <div
                 className="rounded-2xl"
                 style={{ backgroundColor: "#1D283A" }}
-              ></div>
+              >
+                <ActivityManager customerID={customerID} />
+              </div>
             </div>
 
             <div className="ml-2">

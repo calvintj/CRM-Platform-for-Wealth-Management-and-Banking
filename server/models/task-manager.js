@@ -79,15 +79,35 @@ LIMIT 5;
 };
 
 const getPotentialTransaction = async (rm_number) => {
-    const result = await db.query(`
+  const result = await db.query(`
       SELECT ht.bp_number_wm_core AS id_nasabah, ht.nama_produk, ht.profit
   FROM historical_transaction ht
   JOIN customer_info ci ON ht.bp_number_wm_core = ci.bp_number_wm_core
   WHERE ci.assigned_rm = '${rm_number}'
   ORDER BY transaction_id DESC 
     `);
-    return result.rows;
-  };
+  return result.rows;
+};
+
+const getTask = async (rm_number) => {
+  const result = await db.query(`
+      SELECT description, invitee, due_date FROM rm_task_manager
+      WHERE rm_number = '${rm_number}'
+    `);
+  return result.rows;
+};
+
+const postTask = async (task) => {
+  const result = await db.query(
+    `
+        INSERT INTO rm_task_manager (description, invitee, due_date, rm_number)
+        VALUES ($1, $2, $3, $4)
+        RETURNING *
+      `,
+    [task.description, task.invitee, task.due_date, task.rm_number]
+  );
+  return result.rows[0];
+};
 
 module.exports = {
   getManagedNumbers,
@@ -95,4 +115,6 @@ module.exports = {
   getPortfolio,
   getLastTransaction,
   getPotentialTransaction,
+  getTask,
+  postTask,
 };

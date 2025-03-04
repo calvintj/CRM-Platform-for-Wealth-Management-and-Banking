@@ -69,16 +69,12 @@ export default function TaskManagerPage() {
         {/* DASHBOARD CONTENT */}
         <main className="flex flex-col md:flex-row gap-2 flex-1 overflow-y-auto mr-2 my-2">
           {/* Left Column */}
-          <div className="flex flex-col gap-2 md:w-1/4">
-            <div
-              className="flex-1 rounded-2xl"
-              style={{ backgroundColor: "#1D283A" }}
-            >
+          <div className="grid grid-cols gap-2">
+            <div className="rounded-2xl h-[400px] bg-[#1D283A]">
               <TaskManager selectedDate={selectedDate} />
             </div>
             <div
-              className="flex-1 rounded-2xl"
-              style={{ backgroundColor: "#1D283A" }}
+              className="rounded-2xl bg-[#1D283A]"
             >
               <Calendar
                 setSelectedDate={setSelectedDate}

@@ -19,7 +19,7 @@ export default function Sidebar() {
 
   // STYLES
   const linkClass =
-    "text-gray-300 hover:text-white p-4 rounded-md";
+    "text-gray-300 hover:text-white p-4 rounded-full";
 
   // LOGOUT
   const handleLogout = () => {
@@ -30,8 +30,7 @@ export default function Sidebar() {
   return (
     // SIDEBAR
     <aside
-      className="w-20 p-1 flex flex-col m-2 rounded-2xl items-center"
-      style={{ backgroundColor: "#1D283A" }}
+      className="w-20 p-1 flex flex-col m-2 rounded-2xl items-center bg-[#1D283A]"
     >
       {/* Logo or brand */}
       <div className="mt-4 mb-8 flex items-center">

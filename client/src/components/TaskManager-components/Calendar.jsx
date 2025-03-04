@@ -2,9 +2,12 @@ import { useState } from "react";
 import { format, addMonths, subMonths } from "date-fns";
 import id from "date-fns/locale/id";
 import PropTypes from "prop-types";
+import { MdKeyboardArrowLeft, MdKeyboardArrowRight } from "react-icons/md";
 
 const Calendar = ({ setSelectedDate, selectedDate }) => {
-  const [currentMonth, setCurrentMonth] = useState(() => new Date());
+  const [currentMonth, setCurrentMonth] = useState(new Date());
+  const today = new Date();
+  // const todayStyle = { color: 'red' };
 
   const daysShort = ["Min", "Sen", "Sel", "Rab", "Kam", "Jum", "Sab"];
 
@@ -14,11 +17,12 @@ const Calendar = ({ setSelectedDate, selectedDate }) => {
     0
   );
 
-  // List all dates in the current month
-  const daysInMonth = [];
-  for (let i = 1; i <= endOfMonth.getDate(); i++) {
-    daysInMonth.push(new Date(currentMonth.getFullYear(), currentMonth.getMonth(), i));
-  }
+  // Move this into a useEffect or useMemo if needed
+  const daysInMonth = Array.from(
+    { length: endOfMonth.getDate() },
+    (_, i) =>
+      new Date(currentMonth.getFullYear(), currentMonth.getMonth(), i + 1)
+  );
 
   // Utility to check if two dates are the same day
   const isSameDay = (d1, d2) =>
@@ -27,27 +31,29 @@ const Calendar = ({ setSelectedDate, selectedDate }) => {
     d1?.getDate() === d2?.getDate();
 
   return (
-    <div className="text-white p-4 rounded-lg w-full" style={{ backgroundColor: "#1D283A" }}>
+    <div className="text-white p-4 rounded-lg w-full bg-[#1D283A]">
       <div className="flex justify-between items-center mb-3">
-        <button
-          onClick={() => setCurrentMonth(subMonths(currentMonth, 1))}
-          className="px-2 py-1 bg-gray-600 rounded"
-        >
-          ⬅️
-        </button>
         <h2 className="text-xl font-bold">
           {format(currentMonth, "MMMM yyyy", { locale: id })}
         </h2>
-        <button
-          onClick={() => setCurrentMonth(addMonths(currentMonth, 1))}
-          className="px-2 py-1 bg-gray-600 rounded"
-        >
-          ➡️
-        </button>
+        <div className="flex items-center gap-2">
+          <button
+            onClick={() => setCurrentMonth(subMonths(currentMonth, 1))}
+            className="cursor-pointer text-2xl"
+          >
+            <MdKeyboardArrowLeft />
+          </button>
+          <button
+            onClick={() => setCurrentMonth(addMonths(currentMonth, 1))}
+            className="cursor-pointer text-2xl"
+          >
+            <MdKeyboardArrowRight />
+          </button>
+        </div>
       </div>
 
       {/* Days of the week */}
-      <div className="grid grid-cols-7 gap-1 text-center font-bold mb-2">
+      <div className="grid grid-cols-7 mb-2 gap-1 text-center text-gray-400">
         {daysShort.map((day) => (
           <div key={day}>{day}</div>
         ))}
@@ -57,12 +63,13 @@ const Calendar = ({ setSelectedDate, selectedDate }) => {
       <div className="grid grid-cols-7 gap-1 text-center">
         {daysInMonth.map((date) => {
           const isSelected = isSameDay(date, selectedDate);
-
+          const isToday = isSameDay(date, today);
           return (
             <div
               key={date}
-              className={`cursor-pointer p-2 rounded-md hover:bg-blue-600
-                ${isSelected ? "bg-blue-500" : ""}
+              className={`cursor-pointer p-2 rounded-full 
+                ${isSelected ? "bg-blue-900 text-blue-400" : ""}
+                ${isToday && !isSelected ? "text-blue-400" : ""}
               `}
               onClick={() => setSelectedDate(date)}
             >

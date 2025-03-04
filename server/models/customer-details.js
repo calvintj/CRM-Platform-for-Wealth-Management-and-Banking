@@ -76,6 +76,32 @@ const getCustomerDetails = async (rm_number, customerID) => {
   return result.rows[0];
 };
 
+const getRecommendationProduct = async (customerID) => {
+  const result = await db.query(`
+SELECT product_1 AS product, asset_type
+FROM optimized_allocation
+WHERE bp_number_wm_core = '${customerID}'
+  AND product_1 <> '-'
+  AND product_2 <> '-'
+  AND product_3 <> '-'
+UNION ALL
+SELECT product_2 AS product, asset_type
+FROM optimized_allocation
+WHERE bp_number_wm_core = '${customerID}'
+  AND product_1 <> '-'
+  AND product_2 <> '-'
+  AND product_3 <> '-'
+UNION ALL
+SELECT product_3 AS product, asset_type
+FROM optimized_allocation
+WHERE bp_number_wm_core = '${customerID}'
+  AND product_1 <> '-'
+  AND product_2 <> '-'
+  AND product_3 <> '-';
+  `);
+  return result.rows;
+};
+
 const getCustomerPortfolio = async (rm_number, customerID) => {
   const result = await db.query(`
 SELECT ca.casa, ca.sb, ca.deposito, ca.rd FROM current_allocation ca
@@ -99,6 +125,15 @@ ORDER BY oa.bp_number_wm_core ASC;
   return result.rows;
 };
 
+const getReturnPercentage = async (customerID) => {
+  const result = await db.query(`
+SELECT SUM(current_expected_return) AS current_return, SUM(expected_return) AS expected_return
+FROM optimized_allocation
+WHERE bp_number_wm_core = '${customerID}'
+`);
+  return result.rows;
+};
+
 const getOwnedProduct = async (rm_number, customerID) => {
   const result = await db.query(`
     SELECT nama_produk, keterangan, jumlah_amount, price_bought, jumlah_transaksi, profit, return_value
@@ -110,10 +145,39 @@ ORDER BY transaction_id DESC
   return result.rows;
 };
 
+const getActivity = async (bp_number_wm_core) => {
+  const result = await db.query(`
+      SELECT title, description, date FROM customer_activity
+      WHERE bp_number_wm_core = '${bp_number_wm_core}'
+    `);
+  return result.rows;
+};
+
+const postActivity = async (activity) => {
+  const result = await db.query(
+    `
+        INSERT INTO customer_activity (bp_number_wm_core, title, description, date)
+        VALUES ($1, $2, $3, $4)
+        RETURNING *
+      `,
+    [
+      activity.bp_number_wm_core,
+      activity.title,
+      activity.description,
+      activity.date,
+    ]
+  );
+  return result.rows[0];
+};
+
 module.exports = {
   getCustomerIDList,
   getCustomerDetails,
+  getRecommendationProduct,
   getCustomerPortfolio,
   getOptimizedPortfolio,
+  getReturnPercentage,
   getOwnedProduct,
+  getActivity,
+  postActivity,
 };

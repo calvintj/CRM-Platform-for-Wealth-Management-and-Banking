@@ -1,4 +1,4 @@
-import { PieChart as RePieChart, Pie, Cell, Label } from "recharts";
+import { PieChart as RePieChart, Pie, Cell, Label, Tooltip } from "recharts";
 import PropTypes from "prop-types";
 
 export default function GaugeChart({ customerData, customerRisk }) {
@@ -82,6 +82,20 @@ export default function GaugeChart({ customerData, customerRisk }) {
             }}
           />
         </Pie>
+        <Tooltip
+          formatter={(value, name) => {
+            if (name === "Completed") {
+              return `${currentValue.toLocaleString()}`;
+            }
+            return `${(targetValue - currentValue).toLocaleString()}`;
+          }}
+          contentStyle={{
+            background: "white",
+            border: "none",
+            borderRadius: "4px",
+            color: "black",
+          }}
+        />
       </RePieChart>
     </div>
   );
