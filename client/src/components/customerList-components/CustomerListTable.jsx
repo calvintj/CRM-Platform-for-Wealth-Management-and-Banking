@@ -21,7 +21,7 @@ const CustomerListTable = ({ propensity, aum }) => {
                 Customer ID
               </th>
               <th className="sticky top-0 z-30 whitespace-nowrap px-4 py-2 font-medium text-gray-900 dark:text-white bg-white dark:bg-[#1D283A]">
-                Risk Profile
+                Profil Resiko
               </th>
               <th className="sticky top-0 z-30 whitespace-nowrap px-4 py-2 font-medium text-gray-900 dark:text-white bg-white dark:bg-[#1D283A]">
                 AUM Label
@@ -45,7 +45,7 @@ const CustomerListTable = ({ propensity, aum }) => {
                 Usia
               </th>
               <th className="sticky top-0 z-30 whitespace-nowrap px-4 py-2 font-medium text-gray-900 dark:text-white bg-white dark:bg-[#1D283A]">
-                Annual Income
+                Pendapatan Tahunan
               </th>
               <th className="sticky top-0 z-30 whitespace-nowrap px-4 py-2 font-medium text-gray-900 dark:text-white bg-white dark:bg-[#1D283A]">
                 Total FUM

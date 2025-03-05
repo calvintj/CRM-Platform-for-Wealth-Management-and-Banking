@@ -28,7 +28,6 @@ const getTask = async () => {
   return handleResponse(response);
 };
 
-// POST request including token (if available)
 const postTask = async (data) => {
   const token = getToken();
   const response = await fetch(`${BASE_URL}/post-task`, {

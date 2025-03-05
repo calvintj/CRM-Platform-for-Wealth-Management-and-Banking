@@ -106,7 +106,7 @@ export default function OverviewPage() {
               className="flex-[2] rounded-2xl"
               style={{ backgroundColor: "#1D283A" }}
             >
-              <FBIBar customerRisk={customerRisk} quarterlyFBI={quarterlyFBI} />
+              <FBIBar customerRisk={customerRisk} quarterlyFBI={quarterlyFBI} quarterlyFUM={quarterlyFUM}/>
             </div>
 
             {/* Top Products */}

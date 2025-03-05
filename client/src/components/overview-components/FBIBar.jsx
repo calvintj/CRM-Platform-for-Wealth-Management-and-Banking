@@ -1,6 +1,6 @@
 import { PureComponent } from "react";
 import {
-  BarChart,
+  ComposedChart,
   Bar,
   Cell,
   XAxis,
@@ -8,20 +8,39 @@ import {
   Tooltip,
   ResponsiveContainer,
   Label,
+  Line,
 } from "recharts";
 import XAxisInformation from "./XAxisInformation";
 import PropTypes from "prop-types";
 
 export default class FBIBar extends PureComponent {
   render() {
-    const { quarterlyFBI } = this.props;
-    const customerRisk = this.props.customerRisk;
-
+    const { quarterlyFBI, quarterlyFUM, customerRisk } = this.props;
     const filterKey = customerRisk === "All" ? "All" : customerRisk;
-    const data =
+
+    // Filter FBI data
+    const filteredFBI =
       quarterlyFBI && quarterlyFBI.length
         ? quarterlyFBI.filter((entry) => entry.name.startsWith(filterKey))
         : [];
+
+    // Filter FUM data
+    const filteredFUM =
+      quarterlyFUM && quarterlyFUM.length
+        ? quarterlyFUM.filter((entry) => entry.name.startsWith(filterKey))
+        : [];
+
+    // Merge the two datasets: compute ratio for each FBI entry by matching FUM entry
+    const mergedData = filteredFBI.map((fbiEntry) => {
+      const correspondingFUM = filteredFUM.find(
+        (fumEntry) => fumEntry.name === fbiEntry.name
+      );
+      const ratio =
+        correspondingFUM && fbiEntry.value
+          ? correspondingFUM.value / fbiEntry.value
+          : 0;
+      return { ...fbiEntry, ratio };
+    });
 
     return (
       <div
@@ -38,22 +57,23 @@ export default class FBIBar extends PureComponent {
         </h3>
 
         <ResponsiveContainer width="100%" height={300}>
-          <BarChart
-            data={data}
+          <ComposedChart
+            data={mergedData}
             margin={{ top: 30, right: 50, left: 50, bottom: 20 }}
           >
             <XAxis
               dataKey="name"
-              axisLine={true}
-              tickLine={true}
-              tick={<XAxisInformation data={data} />}
+              axisLine
+              tickLine
+              tick={<XAxisInformation data={mergedData} />}
               stroke="#FFFFFF"
               interval={0}
             />
+            {/* Left Y-Axis for FBI values */}
             <YAxis
+              yAxisId="left"
               tickFormatter={(tick) => (tick / 1000).toLocaleString()}
-              tick={true}
-              axisLine={true}
+              axisLine
               stroke="#FFFFFF"
             >
               <Label
@@ -62,7 +82,15 @@ export default class FBIBar extends PureComponent {
                 position="insideLeft"
                 style={{ fill: "#FFFFFF", textAnchor: "middle" }}
               />
-            </YAxis>{" "}
+            </YAxis>
+            {/* Right Y-Axis for the ratio */}
+            <YAxis
+              yAxisId="right"
+              orientation="right"
+              tickFormatter={(tick) => tick.toFixed(2)}
+              axisLine
+              stroke="#FFFFFF"
+            />
             <Tooltip
               cursor={{ fill: "rgba(255,255,255,0.1)" }}
               contentStyle={{
@@ -70,15 +98,29 @@ export default class FBIBar extends PureComponent {
                 borderRadius: "1rem",
               }}
               labelStyle={{ color: "black" }}
-              formatter={(val) => [val.toLocaleString(), "FBI"]}
+              itemStyle={{ color: "black" }}
+              formatter={(val, name) => {
+                if (name === "ratio") {
+                  return [val.toFixed(2), "FUM / FBI"];
+                }
+                return [val.toLocaleString(), name === "value" ? "FBI" : name];
+              }}
               labelFormatter={() => ""}
             />
-            <Bar dataKey="value" barSize={50} radius={[8, 8, 0, 0]}>
-              {data.map((entry, index) => {
-                return <Cell key={`cell-${index}`} fill={"#01ACD2"} />;
-              })}
+            {/* FBI Bar using left axis */}
+            <Bar dataKey="value" yAxisId="left" barSize={50} radius={[8, 8, 0, 0]}>
+              {mergedData.map((entry, index) => (
+                <Cell key={`cell-${index}`} fill={"#01ACD2"} />
+              ))}
             </Bar>
-          </BarChart>
+            {/* Ratio Line using right axis */}
+            <Line
+              type="monotone"
+              dataKey="ratio"
+              yAxisId="right"
+              stroke="#FF0000"
+            />
+          </ComposedChart>
         </ResponsiveContainer>
       </div>
     );
@@ -87,6 +129,7 @@ export default class FBIBar extends PureComponent {
 
 FBIBar.propTypes = {
   quarterlyFBI: PropTypes.array.isRequired,
+  quarterlyFUM: PropTypes.array.isRequired,
   customerRisk: PropTypes.string.isRequired,
   setCustomerRisk: PropTypes.func.isRequired,
 };

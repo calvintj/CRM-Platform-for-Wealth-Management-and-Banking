@@ -102,7 +102,7 @@ const TaskManager = ({ selectedDate }) => {
 
       {/* Task list with scroll enabled */}
       {tasksForSelectedDate.length === 0 ? (
-        <p className="text-center bg-gray-700 p-4 rounded-2xl">Tidak ada tugas hari ini !</p>
+        <p className="text-center bg-gray-700 p-4 rounded-2xl">Tidak ada tugas di tanggal ini !</p>
       ) : (
         <ul className="mb-4 max-h-80 overflow-y-auto rounded-md">
           {tasksForSelectedDate.map((task, index) => (

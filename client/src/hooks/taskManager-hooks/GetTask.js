@@ -20,7 +20,6 @@ const useGetTask = () => {
     fetchData();
   }, []);
 
-  console.log("halo", task)
   return { task, loading, error };
 };
 
