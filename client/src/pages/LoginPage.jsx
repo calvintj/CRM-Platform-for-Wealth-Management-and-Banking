@@ -1,104 +1,123 @@
-// Hooks
+import { useState } from "react";
 import { useLogin } from "../hooks/login-hooks/login";
+import { Link } from "react-router-dom"; // Use Link for client-side navigation
 
 // Assets
-import bati from "../assets/bati.png";
+import Bati from "../assets/Bati.png";
+import Polygon from "../assets/Polygon.png";
+import Polygon2 from "../assets/Polygon 2.png";
 
 const LoginPage = () => {
   // Hooks
   const { handleLogin, error, loading } = useLogin();
 
+  // Controlled input state
+  const [email, setEmail] = useState("");
+  const [password, setPassword] = useState("");
+
   // Functions
   const handleSubmit = async (e) => {
     e.preventDefault();
-    const email = e.target.email.value;
-    const password = e.target.password.value;
-
-    await handleLogin(email, password);
+    try {
+      await handleLogin(email, password);
+    } catch (err) {
+      // Optionally log the error or set a local error state if desired
+      console.error("Login failed:", err);
+    }
   };
 
   return (
     // Login Container
-    <div className="min-h-screen flex items-center justify-center bg-[#1D283A]">
-      <div className="flex flex-col md:flex-row bg-white rounded-2xl shadow-lg overflow-hidden max-w-[930px] w-full mx-4 border-white border-2">
-        {/* Left Box */}
-        <div className="md:w-1/2 flex flex-col items-center justify-center p-4 bg-[#1D283A]">
+    <div className="h-screen flex items-center justify-between bg-[#1D283A]">
+      <div className="ml-20">
+        <img src={Polygon} alt="Polygon" className="w-80 mb-3" />
+      </div>
+      <div className="border-2 border-white flex flex-col bg-white rounded-2xl shadow-lg overflow-hidden">
+        {/* Top Box */}
+        <div className="flex flex-col items-center justify-center p-8 bg-[#1D283A]">
           {/* Logo */}
-          <img
-            src={bati}
-            alt="Fund Manager CRM"
-            className="w-40 md:w-60 mb-3"
-          />
+          <img src={Bati} alt="Fund Manager CRM" className="w-80 mb-3" />
           {/* Logo Text */}
-          <small className="text-white text-center font-mono w-72">
-            Stay on top of client interactions and investments seamlessly.
-          </small>
+          <p className="text-white text-center text-sm">
+            Pantau interaksi dan investasi nasabah dengan lancar!
+          </p>
         </div>
 
-        {/* Right Box */}
-        <div className="md:w-1/2 p-4">
+        {/* Bottom Box */}
+        <div className="p-4 flex flex-col">
           {/* Welcome Back */}
-          <div className="mb-4">
-            <h2 className="text-2xl font-bold mb-2">Welcome Back</h2>
-            <p>Log in to continue managing your funds.</p>
+          <div className="mb-2 flex flex-col items-center justify-center">
+            <p className="text-2xl font-bold mb-2">Selamat Datang!</p>
+            <p>Masuk untuk mengelola dana Anda!</p>
           </div>
 
           {/* Login Form */}
           <form onSubmit={handleSubmit}>
-            {/* Error Message */}
-            {error && (
-              <div className="mb-3 p-2 bg-red-100 text-red-700 rounded">
-                {error}
-              </div>
-            )}
-
             {/* Email Input */}
-            <div className="mb-3">
+            <div className="mb-2">
+              <label htmlFor="email" className="text-sm font-medium text-black">
+                Email address
+              </label>
               <input
+                id="email"
                 type="email"
                 name="email"
                 placeholder="Email address"
+                value={email}
+                onChange={(e) => setEmail(e.target.value)}
                 required
-                autoFocus
-                className="w-full p-3 bg-gray-100 text-base rounded focus:outline-none focus:ring-2 focus:ring-blue-500"
+                className="w-full p-3 mt-1 bg-gray-100 focus:ring-blue-500 rounded-md"
               />
             </div>
 
             {/* Password Input */}
-            <div className="mb-3">
+            <div className="mb-2">
+              <label
+                htmlFor="password"
+                className="text-sm font-medium text-black"
+              >
+                Password
+              </label>
               <input
+                id="password"
                 type="password"
                 name="password"
                 placeholder="Password"
+                value={password}
+                onChange={(e) => setPassword(e.target.value)}
                 required
-                className="w-full p-3 bg-gray-100 text-base rounded focus:outline-none focus:ring-2 focus:ring-blue-500"
+                className="w-full p-3 mt-1 bg-gray-100 focus:ring-blue-500 rounded-md"
               />
             </div>
 
-            {/* Login Button */}
-            <div className="mb-3">
+            {/* Error Message */}
+            {error && (
+              <div className="mb-3 p-2 bg-red-100 text-red-700 rounded-md text-center">
+                {error}
+              </div>
+            )}
+
+            {/* Login Button & Forgot Password Link */}
+            <div className="mb-3 flex justify-between items-center">
               <button
                 type="submit"
-                className="w-full py-2 px-4 text-white font-bold rounded hover:bg-black bg-[#1D283A] cursor-pointer"
+                className="py-2 px-4 text-white font-bold rounded-md hover:bg-blue-500 bg-blue-600 cursor-pointer"
                 disabled={loading}
               >
                 {loading ? "Logging in..." : "Login"}
               </button>
-            </div>
-
-            {/* Forgot Password */}
-            <div className="mb-5 flex justify-between items-center">
-              <div>
-                <a
-                  href="/forgot-password"
-                  className="text-sm text-blue-600 hover:underline"
-                >
-                  Forgot password?
-                </a>
-              </div>
+              <Link
+                to="/forgot-password"
+                className="text-sm text-blue-600 hover:underline"
+              >
+                Forgot password?
+              </Link>
             </div>
           </form>
         </div>
+      </div>
+      <div className="mr-20">
+        <img src={Polygon2} alt="Polygon 2" className="w-80 mb-3" />
       </div>
     </div>
   );

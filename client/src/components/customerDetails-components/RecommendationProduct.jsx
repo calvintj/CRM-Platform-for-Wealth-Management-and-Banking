@@ -12,7 +12,7 @@ export default function RecommendationProduct({ customerID }) {
     <div>
       <ul>
         {recommendationProduct.map((product, index) => (
-          <li key={product.product} className="p-4 text-sm">
+          <li key={product.product} className="text-sm first:py-4 py-2 px-4">
             <div className="flex justify-between">
               <div className="flex flex-col">
                 <span className="font-bold truncate w-60">
