@@ -4,8 +4,10 @@ const CustomerListTable = () => {
   const customerList = useCustomerList();
 
   return (
-    <div className="w-full overflow-x-auto rounded-2xl">
-      <table className="divide-y-2 divide-gray-900 text-sm dark:bg-[#1D283A]">
+    <div 
+      className="w-full overflow-x-auto overflow-y-auto rounded-2xl max-h-[500px]" 
+    >
+      <table className="min-w-full divide-y-2 divide-gray-900 text-sm dark:bg-[#1D283A]">
         <thead>
           <tr className="sticky top-0 z-30 bg-white dark:bg-[#1D283A]">
             <th className="sticky left-0 z-40 whitespace-nowrap px-4 py-2 font-medium text-gray-900 dark:text-white">
