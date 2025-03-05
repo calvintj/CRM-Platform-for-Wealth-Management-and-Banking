@@ -1,61 +1,110 @@
-// components/customerDetails-components/CustomerDropdown.jsx
-import { Menu, MenuButton, MenuItems, MenuItem } from "@headlessui/react";
-import { ChevronDownIcon } from "@heroicons/react/20/solid";
-import { useCustomerIDList } from "../../hooks/customerDetails-hooks/customerIDList";
+import { useState } from "react";
 import PropTypes from "prop-types";
+import { useCustomerIDList } from "../../hooks/customerDetails-hooks/customerIDList";
 
-const CustomerDropdown = ({ customerID, setCustomerID }) => {
+const CustomerInput = ({ setCustomerID }) => {
   const { data: customers, loading } = useCustomerIDList();
+  const [query, setQuery] = useState("");
+  const [showSuggestions, setShowSuggestions] = useState(false);
+  const [activeSuggestion, setActiveSuggestion] = useState(-1);
 
-  // Find the currently selected customer based on customerID
-  const currentCustomer = customers.find((cust) => cust.ID === customerID);
-  const displayValue = currentCustomer ? currentCustomer.ID : "Select Customer";
+  // Filter customers based on the input query (case-insensitive)
+  const filteredCustomers = query
+    ? customers.filter((cust) =>
+        cust.ID.toLowerCase().includes(query.toLowerCase())
+      )
+    : [];
 
-  const handleCustomerSelect = (customer) => {
+  // When a customer is selected, update the input and hide suggestions.
+  const handleSelect = (customer) => {
     setCustomerID(customer.ID);
+    setQuery(customer.ID);
+    setShowSuggestions(false);
+    setActiveSuggestion(-1);
+  };
+
+  // Update query and reset active suggestion.
+  const handleInputChange = (e) => {
+    setQuery(e.target.value);
+    setShowSuggestions(true);
+    setActiveSuggestion(-1);
+  };
+
+  // Handle keyboard navigation and allow direct input acceptance.
+  const handleKeyDown = (e) => {
+    if (e.key === "ArrowDown") {
+      e.preventDefault();
+      if (activeSuggestion < filteredCustomers.length - 1) {
+        setActiveSuggestion(activeSuggestion + 1);
+      }
+    } else if (e.key === "ArrowUp") {
+      e.preventDefault();
+      if (activeSuggestion > 0) {
+        setActiveSuggestion(activeSuggestion - 1);
+      }
+    } else if (e.key === "Enter") {
+      e.preventDefault();
+      if (activeSuggestion >= 0 && activeSuggestion < filteredCustomers.length) {
+        // If a suggestion is highlighted, select it.
+        handleSelect(filteredCustomers[activeSuggestion]);
+      } else if (query.trim() !== "") {
+        // Otherwise, accept the typed value directly.
+        setCustomerID(query);
+        setShowSuggestions(false);
+        setActiveSuggestion(-1);
+      }
+    } else if (e.key === "Escape") {
+      setShowSuggestions(false);
+    }
+  };
+
+  // Hide suggestions on blur (using a timeout to allow click events to process)
+  const handleBlur = () => {
+    setTimeout(() => {
+      setShowSuggestions(false);
+    }, 150);
   };
 
   return (
-    <Menu as="div" className="relative inline-block text-left">
-      <div>
-        <MenuButton className="inline-flex w-75 justify-between gap-x-1.5 rounded-lg px-3 py-2 text-sm font-semibold ring-1 shadow-xs ring-gray-300 ring-inset text-white bg-[#1D283A]">
-          {loading ? "Loading..." : displayValue}
-          <ChevronDownIcon
-            aria-hidden="true"
-            className="h-5 w-5 text-gray-400"
-          />
-        </MenuButton>
-      </div>
-      {customers && customers.length > 0 && (
-        // MenuItems is absolutely positioned relative to the parent.
-        // "right-0" ensures the right edge of the dropdown options aligns with the button's right edge.
-        <MenuItems className="absolute right-0 z-10 mt-2 w-70 origin-top-right rounded-md border border-white shadow-lg bg-[#1D283A] text-white focus:outline-none">
-          <div className="py-1">
-            <div className="max-h-60 overflow-y-auto">
-              {customers.map((customer) => (
-                <MenuItem key={customer.ID}>
-                  {() => (
-                    <button
-                      type="button"
-                      onClick={() => handleCustomerSelect(customer)}
-                      className="block w-full px-4 py-2 text-left text-sm data-focus:bg-gray-100 data-focus:text-gray-900 data-focus:outline-hidden"
-                    >
-                      {customer.ID}
-                    </button>
-                  )}
-                </MenuItem>
-              ))}
-            </div>
-          </div>
-        </MenuItems>
+    <div className="relative w-full">
+      <input
+        type="text"
+        value={query}
+        onChange={handleInputChange}
+        onKeyDown={handleKeyDown}
+        onFocus={() => setShowSuggestions(true)}
+        onBlur={handleBlur}
+        placeholder="Enter Customer ID"
+        className="w-full rounded-lg px-3 py-2 text-sm font-semibold ring-1 shadow-xs ring-gray-300 ring-inset text-white bg-[#1D283A] placeholder-gray-400"
+      />
+      {loading && <div className="text-white mt-2">Loading...</div>}
+      {showSuggestions && filteredCustomers.length > 0 && (
+        <ul className="absolute z-10 mt-1 w-full max-h-60 overflow-y-auto rounded-md bg-[#1D283A] border border-white">
+          {filteredCustomers.map((customer, index) => (
+            <li
+              key={customer.ID}
+              onMouseDown={() => handleSelect(customer)}
+              className={`cursor-pointer px-4 py-2 text-sm text-white hover:bg-gray-700 ${
+                index === activeSuggestion ? "bg-gray-700" : ""
+              }`}
+            >
+              {customer.ID}
+            </li>
+          ))}
+        </ul>
       )}
-    </Menu>
+      {showSuggestions && query && filteredCustomers.length === 0 && (
+        <ul className="absolute z-10 mt-1 w-full rounded-md bg-[#1D283A] border border-white">
+          <li className="px-4 py-2 text-sm text-white">No customers found</li>
+        </ul>
+      )}
+    </div>
   );
 };
 
-CustomerDropdown.propTypes = {
+CustomerInput.propTypes = {
   customerID: PropTypes.string.isRequired,
   setCustomerID: PropTypes.func.isRequired,
 };
 
-export default CustomerDropdown;
+export default CustomerInput;

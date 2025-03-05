@@ -2,7 +2,7 @@
 import { NavLink, useNavigate } from "react-router-dom";
 
 // ASSETS
-import Logo from "../assets/persen white.png";
+import Logo from "../assets/Persen White.png";
 
 // ICONS
 import { RxDashboard } from "react-icons/rx";
@@ -13,103 +13,79 @@ import { IoNewspaperOutline } from "react-icons/io5";
 import { RiRobot3Line } from "react-icons/ri";
 import { BiLogOut } from "react-icons/bi";
 
+const navItems = [
+  {
+    to: "/overview",
+    icon: <RxDashboard className="text-4xl" />,
+    label: "Overview",
+  },
+  {
+    to: "/customer-list",
+    icon: <FaListUl className="text-4xl" />,
+    label: "Customer List",
+  },
+  {
+    to: "/customer-details",
+    icon: <IoPersonOutline className="text-4xl" />,
+    label: "Customer Details",
+  },
+  {
+    to: "/task-manager",
+    icon: <MdOutlineTaskAlt className="text-4xl" />,
+    label: "Task Manager",
+  },
+  {
+    to: "/news",
+    icon: <IoNewspaperOutline className="text-4xl" />,
+    label: "News",
+  },
+  {
+    to: "/chatbot",
+    icon: <RiRobot3Line className="text-4xl" />,
+    label: "Chatbot",
+  },
+];
+
 export default function Sidebar() {
-  // ROUTER
   const navigate = useNavigate();
+  const linkClass = "text-white hover:text-white p-4 mt-2 rounded-full";
 
-  // STYLES
-  const linkClass =
-    "text-gray-300 hover:text-white p-4 rounded-full";
-
-  // LOGOUT
   const handleLogout = () => {
     localStorage.removeItem("token");
-    navigate("/"); // Redirect to the login page
+    navigate("/");
   };
 
   return (
-    // SIDEBAR
-    <aside
-      className="w-20 p-1 flex flex-col m-2 rounded-2xl items-center bg-[#1D283A]"
-    >
-      {/* Logo or brand */}
-      <div className="mt-4 mb-8 flex items-center">
-        <NavLink to="/overview">
-          <img src={Logo} alt="Bati Logo" className="w-10 h-10" />
-        </NavLink>
+    <aside className="w-20 m-2 flex flex-col rounded-2xl items-center bg-[#1D283A]">
+      {/* LOGO OR BRAND */}
+      <div>
+        <img src={Logo} alt="Bati Logo" className="w-10 h-10 mt-6" />
       </div>
 
-      {/* Nav items */}
-      <nav className="flex flex-col gap-1">
-        {/* Overview */}
-        <NavLink
-          to="/overview"
-          className={({ isActive }) =>
-            `${linkClass} ${isActive ? "bg-gray-700" : ""}`
-          }
-        >
-          <RxDashboard className="text-4xl" />
-        </NavLink>
-
-        {/* Customer List */}
-        <NavLink
-          to="/customer-list"
-          className={({ isActive }) =>
-            `${linkClass} ${isActive ? "bg-gray-700" : ""}`
-          }
-        >
-          <FaListUl className="text-4xl" />
-        </NavLink>
-
-        {/* Customer Details */}
-        <NavLink
-          to="/customer-details"
-          className={({ isActive }) =>
-            `${linkClass} ${isActive ? "bg-gray-700" : ""}`
-          }
-        >
-          <IoPersonOutline className="text-4xl" />
-        </NavLink>
-
-        {/* Task Manager */}
-        <NavLink
-          to="/task-manager"
-          className={({ isActive }) =>
-            `${linkClass} ${isActive ? "bg-gray-700" : ""}`
-          }
-        >
-          <MdOutlineTaskAlt className="text-4xl" />
-        </NavLink>
-
-        {/* News */}
-        <NavLink
-          to="/news"
-          className={({ isActive }) =>
-            `${linkClass} ${isActive ? "bg-gray-700" : ""}`
-          }
-        >
-          <IoNewspaperOutline className="text-4xl" />
-        </NavLink>
-        {/* Chatbot */}
-        <NavLink
-          to="/chatbot"
-          className={({ isActive }) =>
-            `${linkClass} ${isActive ? "bg-gray-700" : ""}`
-          }
-        >
-          <RiRobot3Line className="text-4xl" />
-        </NavLink>
+      {/* NAV ITEMS */}
+      <nav className="flex flex-col">
+        {navItems.map(({ to, icon, label }) => (
+          <NavLink
+            key={to}
+            to={to}
+            aria-label={label}
+            className={({ isActive }) =>
+              `${linkClass} ${isActive ? "bg-gray-700" : ""}`
+            }
+          >
+            {icon}
+          </NavLink>
+        ))}
       </nav>
 
-      {/* Logout */}
-      <div className="mt-auto">
+      {/* LOGOUT */}
+      <div className="mt-auto mb-2">
         <button
-          className="text-gray-300 hover:text-white py-2"
+          className="text-white hover:text-white"
           onClick={handleLogout}
+          aria-label="Logout"
         >
-          <NavLink to="/">
-            <BiLogOut className="text-4xl" />
-          </NavLink>
+          <BiLogOut className="text-4xl" />
         </button>
       </div>
     </aside>

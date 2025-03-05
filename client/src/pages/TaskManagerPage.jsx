@@ -63,15 +63,13 @@ export default function TaskManagerPage() {
         <Navbar />
 
         {/* DASHBOARD CONTENT */}
-        <main className="flex flex-col md:flex-row gap-2 flex-1 overflow-y-auto mr-2 my-2">
+        <main className="flex flex-col md:flex-row gap-2 flex-1 mt-2 mr-2">
           {/* Left Column */}
-          <div className="grid grid-cols gap-2">
+          <div className="grid grid-cols-1 gap-2">
             <div className="rounded-2xl h-[400px] bg-[#1D283A]">
               <TaskManager selectedDate={selectedDate} />
             </div>
-            <div
-              className="rounded-2xl bg-[#1D283A]"
-            >
+            <div className="rounded-2xl bg-[#1D283A]">
               <Calendar
                 setSelectedDate={setSelectedDate}
                 selectedDate={selectedDate}
@@ -80,16 +78,14 @@ export default function TaskManagerPage() {
           </div>
 
           {/* Right Column */}
-          <div className="flex flex-col gap-2 md:w-3/4">
+          <div className="flex-1 flex flex-col gap-2">
             <div className="flex flex-col md:flex-row gap-2">
               <div className="flex-1 rounded-2xl p-4 bg-[#1D283A] text-2xl">
                 <h1 className="font-bold">Total AUM</h1>
                 <div className="flex flex-row items-center">
                   <h1>
                     {managedNumbers?.all_aum
-                      ? `Rp ${Number(managedNumbers.all_aum).toLocaleString(
-                          "id-ID"
-                        )}`
+                      ? `Rp ${Number(managedNumbers.all_aum).toLocaleString("id-ID")}`
                       : "N/A"}
                   </h1>
                   <h1
@@ -116,9 +112,7 @@ export default function TaskManagerPage() {
                 <div className="flex flex-row">
                   <h1>
                     {managedNumbers?.all_fbi
-                      ? `Rp ${Number(managedNumbers.all_fbi).toLocaleString(
-                          "id-ID"
-                        )}`
+                      ? `Rp ${Number(managedNumbers.all_fbi).toLocaleString("id-ID")}`
                       : "N/A"}
                   </h1>
                   <h1
@@ -178,19 +172,18 @@ export default function TaskManagerPage() {
             </div>
             <div className="flex flex-row gap-2 items-center">
               <p className="text-lg font-bold">Transaksi Potensial</p>
-
               <div className="flex justify-end items-center gap-2">
                 {/* Previous Button */}
                 <button
                   onClick={handlePrevPage}
                   disabled={currentPage === 0}
                   className={`
-flex items-center justify-center
-w-8 h-8 rounded-full
-bg-gray-700 hover:bg-gray-600
-transition-colors duration-200
-${currentPage === 0 ? "opacity-50 cursor-not-allowed" : ""}
-`}
+                    flex items-center justify-center
+                    w-8 h-8 rounded-full
+                    bg-gray-700 hover:bg-gray-600
+                    transition-colors duration-200
+                    ${currentPage === 0 ? "opacity-50 cursor-not-allowed" : ""}
+                  `}
                 >
                   <ChevronLeftIcon className="h-5 w-5 text-white cursor-pointer" />
                 </button>
@@ -200,18 +193,17 @@ ${currentPage === 0 ? "opacity-50 cursor-not-allowed" : ""}
                   onClick={handleNextPage}
                   disabled={currentPage >= pageCount - 1}
                   className={`
-flex items-center justify-center
-w-8 h-8 rounded-full
-bg-gray-700 hover:bg-gray-600
-transition-colors duration-200
-${currentPage >= pageCount - 1 ? "opacity-50 cursor-not-allowed" : ""}
-`}
+                    flex items-center justify-center
+                    w-8 h-8 rounded-full
+                    bg-gray-700 hover:bg-gray-600
+                    transition-colors duration-200
+                    ${currentPage >= pageCount - 1 ? "opacity-50 cursor-not-allowed" : ""}
+                  `}
                 >
                   <ChevronRightIcon className="h-5 w-5 text-white cursor-pointer" />
                 </button>
               </div>
             </div>
-
             <div className="flex-1 rounded-2xl bg-[#1D283A] flex flex-col">
               {/* Pass the pagination state and updater */}
               <PotentialTransaction

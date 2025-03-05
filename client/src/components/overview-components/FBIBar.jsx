@@ -37,7 +37,7 @@ export default class FBIBar extends PureComponent {
       );
       const ratio =
         correspondingFUM && fbiEntry.value
-          ? correspondingFUM.value / fbiEntry.value
+          ? fbiEntry.value / correspondingFUM.value
           : 0;
       return { ...fbiEntry, ratio };
     });
@@ -101,7 +101,7 @@ export default class FBIBar extends PureComponent {
               itemStyle={{ color: "black" }}
               formatter={(val, name) => {
                 if (name === "ratio") {
-                  return [val.toFixed(2), "FUM / FBI"];
+                  return [val.toFixed(2), "FBI / FUM"];
                 }
                 return [val.toLocaleString(), name === "value" ? "FBI" : name];
               }}

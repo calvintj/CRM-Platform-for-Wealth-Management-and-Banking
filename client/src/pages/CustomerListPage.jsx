@@ -11,7 +11,7 @@ export default function CustomerListPage() {
   const [propensity, setPropensity] = useState("All");
   const [aum, setAum] = useState("All");
   return (
-    <div className="flex min-h-screen bg-gray-900 text-gray-200">
+    <div className="flex h-screen bg-gray-900 text-gray-200">
       <Sidebar />
 
       <div className="flex-1 flex flex-col">

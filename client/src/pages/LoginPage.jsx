@@ -1,59 +1,63 @@
+// REACT  
 import { useState } from "react";
-import { useLogin } from "../hooks/login-hooks/login";
-import { Link } from "react-router-dom"; // Use Link for client-side navigation
 
-// Assets
+// HOOKS
+import { useLogin } from "../hooks/login-hooks/login";
+
+// ROUTER
+import { Link } from "react-router-dom";
+
+// ASSETS
 import Bati from "../assets/Bati.png";
 import Polygon from "../assets/Polygon.png";
 import Polygon2 from "../assets/Polygon 2.png";
 
 const LoginPage = () => {
-  // Hooks
+  // HOOKS
   const { handleLogin, error, loading } = useLogin();
 
-  // Controlled input state
+  // CONTROLLED INPUT STATE
   const [email, setEmail] = useState("");
   const [password, setPassword] = useState("");
 
-  // Functions
+  // FUNCTIONS
   const handleSubmit = async (e) => {
     e.preventDefault();
     try {
       await handleLogin(email, password);
     } catch (err) {
-      // Optionally log the error or set a local error state if desired
       console.error("Login failed:", err);
     }
   };
 
   return (
-    // Login Container
+    // LOGIN CONTAINER
     <div className="h-screen flex items-center justify-between bg-[#1D283A]">
       <div className="ml-20">
         <img src={Polygon} alt="Polygon" className="w-80 mb-3" />
       </div>
       <div className="border-2 border-white flex flex-col bg-white rounded-2xl shadow-lg overflow-hidden">
-        {/* Top Box */}
+        {/* TOP BOX */}
         <div className="flex flex-col items-center justify-center p-8 bg-[#1D283A]">
-          {/* Logo */}
+          {/* LOGO */}
           <img src={Bati} alt="Fund Manager CRM" className="w-80 mb-3" />
-          {/* Logo Text */}
+          {/* LOGO TEXT */}
           <p className="text-white text-center text-sm">
             Pantau interaksi dan investasi nasabah dengan lancar!
           </p>
         </div>
 
-        {/* Bottom Box */}
+        {/* BOTTOM BOX */}
         <div className="p-4 flex flex-col">
-          {/* Welcome Back */}
+          {/* WELCOME BACK */}
           <div className="mb-2 flex flex-col items-center justify-center">
             <p className="text-2xl font-bold mb-2">Selamat Datang!</p>
             <p>Masuk untuk mengelola dana Anda!</p>
           </div>
 
-          {/* Login Form */}
+          {/* LOGIN FORM */}
           <form onSubmit={handleSubmit}>
-            {/* Email Input */}
+            {/* EMAIL INPUT */}
             <div className="mb-2">
               <label htmlFor="email" className="text-sm font-medium text-black">
                 Email address
@@ -70,7 +74,7 @@ const LoginPage = () => {
               />
             </div>
 
-            {/* Password Input */}
+            {/* PASSWORD INPUT */}
             <div className="mb-2">
               <label
                 htmlFor="password"
@@ -90,14 +94,14 @@ const LoginPage = () => {
               />
             </div>
 
-            {/* Error Message */}
+            {/* ERROR MESSAGE */}
             {error && (
               <div className="mb-3 p-2 bg-red-100 text-red-700 rounded-md text-center">
                 {error}
               </div>
             )}
 
-            {/* Login Button & Forgot Password Link */}
+            {/* LOGIN BUTTON & FORGOT PASSWORD LINK */}
             <div className="mb-3 flex justify-between items-center">
               <button
                 type="submit"
