@@ -5,7 +5,7 @@ import id from "date-fns/locale/id";
 import PropTypes from "prop-types";
 import { CiCirclePlus } from "react-icons/ci";
 import useFetchTasks from "../../hooks/taskManager-hooks/GetTask"; // Custom hook to fetch tasks
-import usePostTask from "../../hooks/taskManager-hooks/PostTask";   // Custom hook to post a new task
+import usePostTask from "../../hooks/taskManager-hooks/PostTask"; // Custom hook to post a new task
 
 const TaskManager = ({ selectedDate }) => {
   // Get tasks from hook; rename "task" to "tasks"
@@ -28,7 +28,9 @@ const TaskManager = ({ selectedDate }) => {
 
   const [newTask, setNewTask] = useState("");
   const [newInvitee, setNewInvitee] = useState("");
-  const [newDueDate, setNewDueDate] = useState(format(selectedDate, "yyyy-MM-dd"));
+  const [newDueDate, setNewDueDate] = useState(
+    format(selectedDate, "yyyy-MM-dd")
+  );
 
   // Update default due date when selectedDate changes.
   useEffect(() => {
@@ -99,17 +101,24 @@ const TaskManager = ({ selectedDate }) => {
       {error && <p>Error: {error.message}</p>}
 
       {/* Task list with scroll enabled */}
-      <ul className="mb-4 max-h-80 overflow-y-auto rounded-md">
-        {tasksForSelectedDate.map((task, index) => (
-          <li key={index} className="bg-blue-500 pl-2 mt-2 rounded-md text-black">
-            <div className="bg-white rounded-md p-2">
-              <p className="font-bold">{task.description}</p>
-              <p>Invitee: {task.invitee}</p>
-              <p>Due: {format(new Date(task.due_date), "yyyy-MM-dd")}</p>
-            </div>
-          </li>
-        ))}
-      </ul>
+      {tasksForSelectedDate.length === 0 ? (
+        <p className="text-center bg-gray-700 p-4 rounded-2xl">Tidak ada tugas hari ini !</p>
+      ) : (
+        <ul className="mb-4 max-h-80 overflow-y-auto rounded-md">
+          {tasksForSelectedDate.map((task, index) => (
+            <li
+              key={index}
+              className="bg-blue-500 pl-2 mt-2 rounded-2xl text-black"
+            >
+              <div className="bg-white rounded-2xl p-2">
+                <p className="font-bold">{task.description}</p>
+                <p>Invitee: {task.invitee}</p>
+                <p>Due: {format(new Date(task.due_date), "yyyy-MM-dd")}</p>
+              </div>
+            </li>
+          ))}
+        </ul>
+      )}
 
       {/* Popup rendered via Portal */}
       {showPopup &&
@@ -118,7 +127,9 @@ const TaskManager = ({ selectedDate }) => {
             style={{ top: popupPosition.top, left: popupPosition.left }}
             className="absolute w-60 p-4 bg-[#1D283A] border border-gray-300 rounded-lg shadow-lg z-50"
           >
-            <h4 className="text-md font-bold mb-3 text-white">Tambahkan tugas baru</h4>
+            <h4 className="text-md font-bold mb-3 text-white">
+              Tambahkan tugas baru
+            </h4>
             <input
               type="text"
               className="p-2 rounded-md text-black bg-white w-full mb-2"

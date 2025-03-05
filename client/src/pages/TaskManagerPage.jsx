@@ -17,7 +17,7 @@ import { ChevronLeftIcon, ChevronRightIcon } from "@heroicons/react/24/solid";
 
 export default function TaskManagerPage() {
   const [selectedDate, setSelectedDate] = useState(new Date());
-  const { managedNumbers, loading } = useManagedNumbers();
+  const { managedNumbers } = useManagedNumbers();
   const { increasedNumbers } = useIncreasedNumbers();
 
   const aumIncrease =
@@ -51,10 +51,6 @@ export default function TaskManagerPage() {
       setCurrentPage((prev) => prev + 1);
     }
   };
-
-  if (loading) {
-    return <div>Loading...</div>;
-  }
 
   return (
     <div className="flex h-screen bg-gray-900 text-gray-200">

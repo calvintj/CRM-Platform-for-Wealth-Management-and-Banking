@@ -79,8 +79,7 @@ const LoginPage = () => {
             <div className="mb-3">
               <button
                 type="submit"
-                className="w-full py-2 px-4 text-white font-bold rounded hover:bg-black"
-                style={{ backgroundColor: "#1D283A" }}
+                className="w-full py-2 px-4 text-white font-bold rounded hover:bg-black bg-[#1D283A] cursor-pointer"
                 disabled={loading}
               >
                 {loading ? "Logging in..." : "Login"}

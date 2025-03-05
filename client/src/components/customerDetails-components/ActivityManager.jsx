@@ -92,22 +92,28 @@ const ActivityManager = ({ customerID }) => {
       {error && <p>Error: {error.message}</p>}
 
       {/* Activity list */}
-      <ul className="mb-4 max-h-80 overflow-y-auto rounded-md">
-        {activities.map((activity, index) => (
-          <li
-            key={index}
-            className="bg-gray-700 py-2 px-4 mt-2 rounded-2xl text-white flex justify-between items-center"
-          >
-            <div>
-              <p className="font-bold">{activity.title}</p>
-              <p>{activity.description}</p>
-            </div>
-            <p className="text-gray-400">
-              {activity.date ? new Date(activity.date).toLocaleDateString("id-ID") : "—"}
-            </p>
-          </li>
-        ))}
-      </ul>
+      {(!loading && !error) && (
+        activities.length === 0 ? (
+          <p className="text-center bg-gray-700 p-4 rounded-2xl">Tidak ada aktivitas tersedia !</p>
+        ) : (
+          <ul className="mb-4 max-h-80 overflow-y-auto rounded-md">
+            {activities.map((activity, index) => (
+              <li
+                key={index}
+                className="bg-gray-700 py-2 px-4 mt-2 rounded-2xl text-white flex justify-between items-center"
+              >
+                <div>
+                  <p className="font-bold">{activity.title}</p>
+                  <p>{activity.description}</p>
+                </div>
+                <p className="text-gray-400">
+                  {activity.date ? new Date(activity.date).toLocaleDateString("id-ID") : "—"}
+                </p>
+              </li>
+            ))}
+          </ul>
+        )
+      )}
 
       {/* Popup rendered via Portal */}
       {showPopup &&
