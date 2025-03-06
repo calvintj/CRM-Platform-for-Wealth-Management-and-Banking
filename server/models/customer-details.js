@@ -33,7 +33,7 @@ const getCustomerIDList = async (rm_number) => {
         ci.usia,
         ci.annual_income,
         ci.tanggal_join_wealth
-      ORDER BY ci.bp_number_wm_core ASC;
+      ORDER BY CAST(ci.bp_number_wm_core AS INTEGER) ASC;
     `);
   return result.rows;
 };

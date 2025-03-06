@@ -88,7 +88,7 @@ const ActivityManager = ({ customerID }) => {
       </div>
 
       {/* Loading or error messages */}
-      {loading && <p>Loading tasks...</p>}
+      {loading && <p className="text-center text-2xl h-[220px] flex justify-center items-center">N/A</p>}
       {error && <p>Error: {error.message}</p>}
 
       {/* Activity list */}

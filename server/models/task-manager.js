@@ -89,6 +89,28 @@ const getPotentialTransaction = async (rm_number) => {
   return result.rows;
 };
 
+const getOfferProductRisk = async (rm_number) => {
+  const result = await db.query(`
+    SELECT cs.bp_number_wm_core, cs.risk_profile, cs.offer_product_risk_1 , cs.offer_product_risk_2 , cs.offer_product_risk_3, cs.offer_product_risk_4, cs.offer_product_risk_5
+FROM customer_segmentation_offer cs
+JOIN customer_info ci ON cs.bp_number_wm_core = ci.bp_number_wm_core
+WHERE ci.assigned_rm = '${rm_number}'
+ORDER BY CAST(ci.bp_number_wm_core AS INTEGER) ASC
+  `);
+  return result.rows;
+};
+
+const getReProfileRiskTarget = async (rm_number) => {
+  const result = await db.query(`
+    SELECT cs.bp_number_wm_core, cs.risk_profile, cs.offer_reprofile_risk_target
+FROM customer_segmentation_offer cs
+JOIN customer_info ci ON cs.bp_number_wm_core = ci.bp_number_wm_core
+WHERE ci.assigned_rm = '${rm_number}' AND cs.offer_reprofile_risk_target != '0'
+ORDER BY CAST(ci.bp_number_wm_core AS INTEGER) ASC
+  `);
+  return result.rows;
+};
+
 const getTask = async (rm_number) => {
   const result = await db.query(`
       SELECT description, invitee, due_date FROM rm_task_manager
@@ -117,4 +139,6 @@ module.exports = {
   getPotentialTransaction,
   getTask,
   postTask,
+  getOfferProductRisk,
+  getReProfileRiskTarget,
 };

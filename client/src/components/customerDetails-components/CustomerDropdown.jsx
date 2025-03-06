@@ -80,7 +80,7 @@ const CustomerInput = ({ setCustomerID }) => {
   };
 
   return (
-    <div className="relative w-full">
+    <div className="relative">
       <input
         type="text"
         value={query}
@@ -89,7 +89,7 @@ const CustomerInput = ({ setCustomerID }) => {
         onFocus={() => setShowSuggestions(true)}
         onBlur={handleBlur}
         placeholder="Masukkan ID Nasabah"
-        className="w-full rounded-lg px-3 py-2 text-sm font-semibold ring-1 shadow-xs ring-gray-300 ring-inset text-white bg-[#1D283A] placeholder-gray-400"
+        className="w-full rounded-lg p-2 text-sm font-semibold ring-1 shadow-xs ring-gray-300 ring-inset text-white bg-[#1D283A] placeholder-gray-400"
       />
       {loading && <div className="text-white mt-2">Loading...</div>}
       {showSuggestions && filteredCustomers.length > 0 && (

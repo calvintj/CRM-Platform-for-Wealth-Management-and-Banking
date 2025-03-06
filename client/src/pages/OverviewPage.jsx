@@ -44,7 +44,7 @@ export default function OverviewPage() {
         <Navbar customerRisk={customerRisk} setCustomerRisk={setCustomerRisk} />
 
         {/* DASHBOARD CONTENT */}
-        <main className="flex flex-col gap-2 flex-1 overflow-y-auto mr-2 my-2">
+        <main className="flex flex-col gap-2 flex-1 overflow-y-scroll mr-2 my-2 overscroll-contain">
           {/* Total Customer, AUM, and FBI */}
           <div className="flex flex-col md:flex-row gap-2">
             <section
@@ -121,7 +121,7 @@ export default function OverviewPage() {
           </div>
           <div>
             <section className="w-[1410px]">
-              <CustomerListTable />
+              <CustomerListTable customerRisk={customerRisk} />
             </section>
           </div>
         </main>

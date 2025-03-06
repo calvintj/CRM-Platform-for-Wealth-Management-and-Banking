@@ -20,7 +20,7 @@ import { GrOptimize } from "react-icons/gr";
 
 export default function CustomerDetailsPage() {
   // State hooks
-  const [customerID, setCustomerID] = useState("1");
+  const [customerID, setCustomerID] = useState("");
   const { data, loading } = useCustomerDetails(customerID);
   const [currentPortfolio, setCurrentPortfolio] = useState("current");
   const { returnPercentage } = useGetReturnPercentage(customerID);
@@ -38,27 +38,20 @@ export default function CustomerDetailsPage() {
         <Navbar />
 
         {/* DASHBOARD CONTENT */}
-        <main className="grid grid-cols-12 gap-2 flex-1 overflow-y-auto mr-2 mt-2">
+        <main className="grid grid-cols-12 gap-2 flex-1 overflow-y-auto mr-2 mt-2 overscroll-contain">
           {/* Left Column - Customer Details */}
           <div className="flex flex-col gap-2 col-span-3">
-            <div className="ml-2 font-bold">ID Nasabah</div>
-
             {/* Customer Dropdown */}
-            <div
-              className="rounded-2xl p-2 flex items-center justify-center"
-              style={{ backgroundColor: "#1D283A" }}
-            >
+            <div className="rounded-2xl flex items-center justify-between p-2 bg-[#1D283A]">
+              <div className="font-bold">ID Nasabah: {customerID}</div>
+
               <CustomerDropdown
                 customerID={customerID}
                 setCustomerID={setCustomerID}
               />
             </div>
-
             {/* Customer Details */}
-            <div
-              className="flex flex-col rounded-2xl gap-4 p-4"
-              style={{ backgroundColor: "#1D283A" }}
-            >
+            <div className="flex flex-col rounded-2xl gap-4 p-4 bg-[#1D283A]">
               {loading ? (
                 <div className="text-center">Loading...</div>
               ) : (
@@ -145,20 +138,19 @@ export default function CustomerDetailsPage() {
             </div>
 
             {/* Portfolio Allocation */}
-            <div className="grid md:grid-cols-2 gap-2">
+            <div className="grid grid-cols-2 gap-2 h-[420px]">
               {/* Current & Optimized Allocation */}
-              <div
-                className="rounded-2xl"
-                style={{ backgroundColor: "#1D283A" }}
-              >
-                {/* Animate the portfolio transition */}
-                {currentPortfolio === "optimized" ? (
-                  <OptimizedPortfolio customerID={customerID} />
-                ) : (
-                  <PortfolioPie customerID={customerID} />
-                )}
-
-                <div className="flex justify-between items-center px-4 pb-4">
+              <div className="rounded-2xl bg-[#1D283A]">
+                {/* Portfolio Transition Animation */}
+                <div>
+                  {currentPortfolio === "optimized" ? (
+                    <OptimizedPortfolio customerID={customerID} />
+                  ) : (
+                    <PortfolioPie customerID={customerID} />
+                  )}
+                </div>
+                {/* Header with Return Info and Toggle Button */}
+                <div className="flex justify-between items-center px-4 py-4">
                   <div className="flex flex-col">
                     <p className="text-sm text-white">
                       {currentPortfolio === "current"

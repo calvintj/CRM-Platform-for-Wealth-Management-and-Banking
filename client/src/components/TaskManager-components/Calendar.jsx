@@ -31,7 +31,7 @@ const Calendar = ({ setSelectedDate, selectedDate }) => {
     d1?.getDate() === d2?.getDate();
 
   return (
-    <div className="text-white p-4 rounded-lg w-full bg-[#1D283A]">
+    <div className="text-white rounded-lg w-full bg-[#1D283A] p-4 h-full">
       <div className="flex justify-between items-center mb-3">
         <h2 className="text-xl font-bold">
           {format(currentMonth, "MMMM yyyy", { locale: id })}

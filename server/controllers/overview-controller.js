@@ -5,6 +5,7 @@ const {
   getQuarterlyFBI,
   getQuarterlyFUM,
   getTopProducts,
+  getCertainCustomerList,
 } = require("../models/overview");
 
 const getTotalCustomerController = async (req, res) => {
@@ -43,6 +44,14 @@ const getTopProductsController = async (req, res) => {
   res.json(topProducts);
 };
 
+const getCertainCustomerListController = async (req, res) => {
+  const { rm_number, customerRisk } = req.query;
+  const certainCustomerList = await getCertainCustomerList(
+    rm_number,
+    customerRisk
+  );
+  res.json(certainCustomerList);
+};
 module.exports = {
   getTotalCustomerController,
   getTotalAUMController,
@@ -50,4 +59,5 @@ module.exports = {
   getQuarterlyFBIController,
   getQuarterlyFUMController,
   getTopProductsController,
+  getCertainCustomerListController,
 };

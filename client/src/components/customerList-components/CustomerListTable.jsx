@@ -27,7 +27,7 @@ const CustomerListTable = ({ propensity, aum }) => {
     propensity === "All" && aum === "All" ? customerList : certainCustomerList;
 
   return (
-    <div className="w-full overflow-x-auto overflow-y-auto rounded-2xl max-h-[500px]">
+    <div className="w-full overflow-scroll rounded-2xl max-h-[500px]">
       <table className="min-w-full divide-y-2 divide-gray-900 text-sm dark:bg-[#1D283A]">
         <thead>
           <tr className="sticky top-0 z-30 bg-white dark:bg-[#1D283A]">

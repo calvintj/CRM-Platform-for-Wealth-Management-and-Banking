@@ -24,11 +24,15 @@ ChartJS.register(
 
 // HOOKS
 import { useCustomerList } from "../../hooks/customerList-hooks/customerList";
+import { useState } from "react";
 import PropTypes from "prop-types";
 
 const StackedBarChart = ({ setPropensity, setAum }) => {
   // Fetch customer data using a custom hook
   const customerList = useCustomerList();
+
+  // Add state to track selected bar
+  const [selectedBar, setSelectedBar] = useState(null);
 
   // Define categories for AUM (x-axis) and Propensity (y-axis)
   const aumCategories = ["Zero", "Low", "Medium", "High"];
@@ -87,11 +91,27 @@ const StackedBarChart = ({ setPropensity, setAum }) => {
             };
           }),
           backgroundColor: aumCategories.map((_, aumIndex) => {
-            if (aumIndex + propIndex === aumCategories.length - 1)
-              return "#FBB716";
-            else if (aumIndex + propIndex < aumCategories.length - 1)
-              return "#F52720";
-            else return "#01ACD2";
+            // If we have a selected bar, make all other bars gray
+            if (selectedBar) {
+              const isSelected =
+                selectedBar.aumIndex === aumIndex &&
+                selectedBar.propIndex === propIndex;
+
+              return isSelected
+                ? aumIndex + propIndex === aumCategories.length - 1
+                  ? "#FBB716"
+                  : aumIndex + propIndex < aumCategories.length - 1
+                  ? "#F52720"
+                  : "#01ACD2"
+                : "#808080"; // gray-400 for non-selected bars
+            } else {
+              // Original coloring when no bar is selected
+              if (aumIndex + propIndex === aumCategories.length - 1)
+                return "#FBB716";
+              else if (aumIndex + propIndex < aumCategories.length - 1)
+                return "#F52720";
+              else return "#01ACD2";
+            }
           }),
         };
       }),
@@ -102,10 +122,10 @@ const StackedBarChart = ({ setPropensity, setAum }) => {
   const options = {
     onClick: (event, elements) => {
       if (elements.length > 0) {
-        const { index, datasetIndex } = elements[0];
-        const aumCategory = aumCategories[index];
-        const propensityCategory = propensityCategories[datasetIndex];
-        const actualCount = data.datasets[datasetIndex].data[index].actualCount;
+        const { index: aumIndex, datasetIndex: propIndex } = elements[0];
+        const aumCategory = aumCategories[aumIndex];
+        const propensityCategory = propensityCategories[propIndex];
+        const actualCount = data.datasets[propIndex].data[aumIndex].actualCount;
 
         console.log("Clicked on:", {
           aumCategory,
@@ -113,11 +133,15 @@ const StackedBarChart = ({ setPropensity, setAum }) => {
           count: actualCount,
         });
 
+        // Set the selected bar
+        setSelectedBar({ aumIndex, propIndex });
+
         setPropensity(propensityCategory);
         setAum(aumCategory);
       } else {
         // When clicking outside of a bar, set both filters to "All"
         console.log("Clicked outside bars - resetting filters to All");
+        setSelectedBar(null);
         setPropensity("All");
         setAum("All");
       }

@@ -18,7 +18,7 @@ export default function CustomerListPage() {
         <Navbar />
 
         {/* MAIN CONTENT AREA */}
-        <main className="grid grid-rows gap-2 flex-1 overflow-y-auto mr-2 my-2">
+        <main className="grid grid-rows gap-2 flex-1 overflow-y-scroll mr-2 my-2 overscroll-contain">
           {/* Stacked Bar Chart */}
           <div className="grid rounded-2xl bg-[#1D283A]">
             <StackedBarChart setPropensity={setPropensity} setAum={setAum} />

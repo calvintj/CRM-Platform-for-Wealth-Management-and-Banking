@@ -1,25 +1,35 @@
+import { useCertainCustomerList } from "../../hooks/overview-hooks/certainCustomerList";
 import { useCustomerList } from "../../hooks/customerList-hooks/customerList";
 
-const CustomerListTable = () => {
-  const customerList = useCustomerList();
+import PropTypes from "prop-types";
+
+const CustomerListTable = ({ customerRisk }) => {
+  // Always call both hooks so the hooks order is consistent.
+  const fullCustomerList = useCustomerList();
+  const certainCustomerList = useCertainCustomerList(customerRisk);
+
+  // Select the customer list based on the customerRisk prop.
+  const customerList = customerRisk === "All" ? fullCustomerList : certainCustomerList;
+
+  // Update the header labels to match the keys in the data rows.
   const header = [
     "Customer ID",
-    "Profil Resiko",
+    "Risk Profile",
     "AUM Label",
     "Propensity",
-    "Status",
-    "Tipe Customer",
+    "Priority / Private",
+    "Customer Type",
     "Pekerjaan",
     "Status Nikah",
     "Usia",
-    "Pendapatan Tahunan",
+    "Annual Income",
     "Total FUM",
     "Total AUM",
     "Total FBI",
   ];
 
   return (
-    <div className="w-full overflow-x-auto overflow-y-auto rounded-2xl max-h-[500px]">
+    <div className="w-full overflow-scroll rounded-2xl max-h-[500px]">
       <table className="min-w-full divide-y-2 divide-gray-900 text-sm dark:bg-[#1D283A]">
         <thead>
           <tr className="sticky top-0 z-30 bg-white dark:bg-[#1D283A]">
@@ -85,6 +95,10 @@ const CustomerListTable = () => {
       </table>
     </div>
   );
+};
+
+CustomerListTable.propTypes = {
+  customerRisk: PropTypes.string.isRequired,
 };
 
 export default CustomerListTable;

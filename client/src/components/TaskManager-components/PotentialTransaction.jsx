@@ -1,23 +1,8 @@
-import PropTypes from "prop-types";
-import { useEffect } from "react";
 import usePotentialTransaction from "../../hooks/taskManager-hooks/PotentialTransaction";
 
-export default function OwnedProductTable({ currentPage, setPageCount }) {
+export default function OwnedProductTable() {
   // Hook
   const { potentialTransaction, loading, error } = usePotentialTransaction();
-  const itemsPerPage = 5;
-
-  // Calculate and update page count when data loads or changes
-  useEffect(() => {
-    if (potentialTransaction && potentialTransaction.length > 0) {
-      const newPageCount = Math.ceil(
-        potentialTransaction.length / itemsPerPage
-      );
-      setPageCount(newPageCount);
-    } else {
-      setPageCount(0);
-    }
-  }, [potentialTransaction, itemsPerPage, setPageCount]);
 
   if (loading) {
     return <div>Loading potential transaction data...</div>;
@@ -27,15 +12,8 @@ export default function OwnedProductTable({ currentPage, setPageCount }) {
     return <div>Error loading potential transaction data: {error.message}</div>;
   }
 
-  // Calculate pagination values
-  const offset = currentPage * itemsPerPage;
-  const currentItems = potentialTransaction.slice(
-    offset,
-    offset + itemsPerPage
-  );
-
   return (
-    <div className="h-[230px] flex flex-col">
+    <div className="h-[300px] flex flex-col mb-3">
       <div className="flex-1 overflow-auto rounded-2xl">
         {/* <div className="rounded-2xl mx-2"> */}
         <table className="divide-y-2 divide-gray-900 text-sm text-center w-full">
@@ -48,7 +26,7 @@ export default function OwnedProductTable({ currentPage, setPageCount }) {
             </tr>
           </thead>
           <tbody className="divide-y-2 divide-gray-900">
-            {currentItems.map((product, index) => (
+            {potentialTransaction.map((product, index) => (
               <tr key={index}>
                 <td className="py-2">{product.id_nasabah}</td>
                 <td>{product.nama_produk}</td>
@@ -85,8 +63,3 @@ export default function OwnedProductTable({ currentPage, setPageCount }) {
     </div>
   );
 }
-
-OwnedProductTable.propTypes = {
-  currentPage: PropTypes.number.isRequired,
-  setPageCount: PropTypes.func.isRequired,
-};

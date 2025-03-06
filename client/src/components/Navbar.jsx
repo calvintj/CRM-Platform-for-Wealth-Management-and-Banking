@@ -27,7 +27,7 @@ export default function Navbar({ setCustomerRisk }) {
     <header className="flex items-center justify-between rounded-2xl bg-[#1D283A] p-2 mt-2 mr-2">
       {/* Left: Only show on /overview */}
       {location.pathname === "/overview" && (
-        <Menu as="div" className="relative inline-block ml-2">
+        <Menu as="div" className="relative inline-block ml-2 z-10">
           <div>
             <MenuButton className="cursor-pointer flex w-full rounded-lg p-2 text-sm font-semibold ring-2 ring-white text-white bg-[#1D283A]">
               Risiko

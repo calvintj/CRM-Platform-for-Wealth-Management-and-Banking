@@ -4,6 +4,8 @@ import { format } from "date-fns";
 import id from "date-fns/locale/id";
 import PropTypes from "prop-types";
 import { CiCirclePlus } from "react-icons/ci";
+// import { IoTrashOutline } from "react-icons/io5";
+// import { FaRegEdit } from "react-icons/fa";
 import useFetchTasks from "../../hooks/taskManager-hooks/GetTask"; // Custom hook to fetch tasks
 import usePostTask from "../../hooks/taskManager-hooks/PostTask"; // Custom hook to post a new task
 
@@ -80,7 +82,7 @@ const TaskManager = ({ selectedDate }) => {
   };
 
   return (
-    <div className="relative p-4 rounded-lg text-white w-full bg-[#1D283A]">
+    <div className="relative p-4 rounded-lg text-white w-full bg-[#1D283A] h-[500px]">
       {/* Header with date and plus icon */}
       <div className="flex justify-between items-center mb-3">
         <h3 className="text-lg font-bold">

@@ -57,30 +57,30 @@ export default function PortfolioPie({ colors = defaultColors, customerID }) {
 
   if (loading) {
     return (
-      <div className="p-4 flex justify-center items-center h-full">
-        <p>Loading portfolio data...</p>
+      <div className="p-4 flex justify-center items-center h-[330px] text-2xl">
+        <p>N/A</p>
       </div>
     );
   }
 
   if (error) {
     return (
-      <div className="p-4 flex justify-center items-center h-full">
-        <p>Error loading portfolio data: {error.message}</p>
+      <div className="p-4 flex justify-center items-center h-[330px]">
+        <p>Error memuat data portofolio: {error.message}</p>
       </div>
     );
   }
 
   if (transformedData.length === 0) {
     return (
-      <div className="p-4 flex justify-center items-center h-full">
-        <p>No portfolio data available</p>
+      <div className="p-4 flex justify-center items-center h-[330px]">
+        <p>Tidak ada data portofolio</p>
       </div>
     );
   }
 
   return (
-    <div className="p-4">
+    <div className="p-4 h-[330px] w-full">
       <p className="text-center text-xl md:text-2xl font-bold">
         Portofolio Nasabah
       </p>

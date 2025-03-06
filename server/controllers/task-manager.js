@@ -6,6 +6,8 @@ const {
   getPotentialTransaction,
   getTask,
   postTask,
+  getOfferProductRisk,
+  getReProfileRiskTarget,
 } = require("../models/task-manager");
 
 const getManagedNumbersController = async (req, res) => {
@@ -69,6 +71,18 @@ const postTaskController = async (req, res) => {
   }
 };
 
+const getOfferProductRiskController = async (req, res) => {
+  const { rm_number } = req.query;
+  const offerProductRisk = await getOfferProductRisk(rm_number);
+  res.json(offerProductRisk);
+};
+
+const getReProfileRiskTargetController = async (req, res) => {
+  const { rm_number } = req.query;
+  const reProfileRiskTarget = await getReProfileRiskTarget(rm_number);
+  res.json(reProfileRiskTarget);
+};
+
 module.exports = {
   getManagedNumbersController,
   getIncreasedNumbersController,
@@ -77,4 +91,6 @@ module.exports = {
   getPotentialTransactionController,
   getTaskController,
   postTaskController,
+  getOfferProductRiskController,
+  getReProfileRiskTargetController,
 };
