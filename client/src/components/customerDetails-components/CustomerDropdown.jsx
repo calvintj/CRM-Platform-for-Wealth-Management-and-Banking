@@ -1,4 +1,4 @@
-import { useState } from "react";
+import { useState, useRef, useEffect } from "react";
 import PropTypes from "prop-types";
 import { useCustomerIDList } from "../../hooks/customerDetails-hooks/customerIDList";
 
@@ -7,6 +7,7 @@ const CustomerInput = ({ setCustomerID }) => {
   const [query, setQuery] = useState("");
   const [showSuggestions, setShowSuggestions] = useState(false);
   const [activeSuggestion, setActiveSuggestion] = useState(-1);
+  const suggestionRefs = useRef([]);
 
   // Filter customers based on the input query (case-insensitive)
   const filteredCustomers = query
@@ -58,6 +59,19 @@ const CustomerInput = ({ setCustomerID }) => {
     }
   };
 
+  // Auto-scroll the active suggestion into view when it changes.
+  useEffect(() => {
+    if (
+      activeSuggestion >= 0 &&
+      suggestionRefs.current[activeSuggestion]
+    ) {
+      suggestionRefs.current[activeSuggestion].scrollIntoView({
+        behavior: "smooth",
+        block: "nearest",
+      });
+    }
+  }, [activeSuggestion]);
+
   // Hide suggestions on blur (using a timeout to allow click events to process)
   const handleBlur = () => {
     setTimeout(() => {
@@ -74,7 +88,7 @@ const CustomerInput = ({ setCustomerID }) => {
         onKeyDown={handleKeyDown}
         onFocus={() => setShowSuggestions(true)}
         onBlur={handleBlur}
-        placeholder="Enter Customer ID"
+        placeholder="Masukkan ID Nasabah"
         className="w-full rounded-lg px-3 py-2 text-sm font-semibold ring-1 shadow-xs ring-gray-300 ring-inset text-white bg-[#1D283A] placeholder-gray-400"
       />
       {loading && <div className="text-white mt-2">Loading...</div>}
@@ -83,6 +97,7 @@ const CustomerInput = ({ setCustomerID }) => {
           {filteredCustomers.map((customer, index) => (
             <li
               key={customer.ID}
+              ref={(el) => (suggestionRefs.current[index] = el)}
               onMouseDown={() => handleSelect(customer)}
               className={`cursor-pointer px-4 py-2 text-sm text-white hover:bg-gray-700 ${
                 index === activeSuggestion ? "bg-gray-700" : ""

@@ -81,7 +81,7 @@ export default function Sidebar() {
       {/* LOGOUT */}
       <div className="mt-auto mb-2">
         <button
-          className="text-white hover:text-white"
+          className="text-white hover:text-white cursor-pointer"
           onClick={handleLogout}
           aria-label="Logout"
         >

@@ -116,8 +116,10 @@ export default function OverviewPage() {
               />
             </section>
           </div>
-
-          <div >
+          <div>
+            <p className="text-2xl font-bold text-center">Customer List</p>
+          </div>
+          <div>
             <section className="w-[1410px]">
               <CustomerListTable />
             </section>

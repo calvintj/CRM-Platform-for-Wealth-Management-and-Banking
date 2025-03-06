@@ -112,7 +112,7 @@ const LoginPage = () => {
               </button>
               <Link
                 to="/forgot-password"
-                className="text-sm text-blue-600 hover:underline"
+                className="text-sm text-blue-600 hover:underline cursor-pointer"
               >
                 Forgot password?
               </Link>
