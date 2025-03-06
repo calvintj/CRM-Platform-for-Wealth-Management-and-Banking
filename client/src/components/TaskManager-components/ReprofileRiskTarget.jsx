@@ -1,3 +1,4 @@
+import { NavLink } from "react-router-dom";
 import useReprofileRiskTarget from "../../hooks/taskManager-hooks/ReprofileRiskTarget";
 import { CiShare1 } from "react-icons/ci";
 
@@ -33,36 +34,29 @@ export default function ReprofileRiskTarget() {
                 <td>{product.risk_profile}</td>
                 <td className="">
                   {product.offer_reprofile_risk_target === "1" && (
-                    <span className="text-white">
-                      1 - Conservative
-                    </span>
+                    <span className="text-white">1 - Conservative</span>
                   )}
                   {product.offer_reprofile_risk_target === "2" && (
-                    <span className="text-white">
-                      2 - Balanced
-                    </span>
+                    <span className="text-white">2 - Balanced</span>
                   )}
                   {product.offer_reprofile_risk_target === "3" && (
-                    <span className="text-white">
-                      3 - Balanced
-                    </span>
+                    <span className="text-white">3 - Balanced</span>
                   )}
                   {product.offer_reprofile_risk_target === "4" && (
-                    <span className="text-white">
-                      4 - Balanced
-                    </span>
+                    <span className="text-white">4 - Balanced</span>
                   )}
                   {product.offer_reprofile_risk_target === "5" && (
-                    <span className="text-white">
-                      5 - Aggressive
-                    </span>
+                    <span className="text-white">5 - Aggressive</span>
                   )}
                 </td>
                 <td className="flex justify-center items-center">
-                  <button className="text-white p-2 bg-[#01ACD2] rounded-md my-2 w-20 flex justify-center items-center gap-2 cursor-pointer">
+                  <NavLink
+                    to={`/customer-details?customerID=${product.bp_number_wm_core}`}
+                    className="text-white p-2 bg-[#01ACD2] rounded-md my-2 w-20 flex justify-center items-center gap-2 cursor-pointer"
+                  >
                     Profil
                     <CiShare1 />
-                  </button>
+                  </NavLink>
                 </td>
               </tr>
             ))}

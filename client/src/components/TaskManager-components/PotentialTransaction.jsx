@@ -13,7 +13,7 @@ export default function OwnedProductTable() {
   }
 
   return (
-    <div className="h-[300px] flex flex-col mb-3">
+    <div className="h-[310px] flex flex-col mb-3">
       <div className="flex-1 overflow-auto rounded-2xl">
         {/* <div className="rounded-2xl mx-2"> */}
         <table className="divide-y-2 divide-gray-900 text-sm text-center w-full">

@@ -1,3 +1,4 @@
+import { NavLink } from "react-router-dom";
 import useOfferProductRisk from "../../hooks/taskManager-hooks/OfferProductRisk";
 import { CiShare1 } from "react-icons/ci";
 
@@ -59,10 +60,13 @@ export default function OfferProductRisk() {
                   )}
                 </td>
                 <td className="flex justify-center items-center">
-                  <button className="text-white p-2 bg-[#01ACD2] rounded-md my-2 w-20 flex justify-center items-center gap-2 cursor-pointer">
+                  <NavLink
+                    to={`/customer-details?customerID=${product.bp_number_wm_core}`}
+                    className="text-white p-2 bg-[#01ACD2] rounded-md my-2 w-20 flex justify-center items-center gap-2 cursor-pointer"
+                  >
                     Profil
-                    <CiShare1/>
-                  </button>
+                    <CiShare1 />
+                  </NavLink>
                 </td>
               </tr>
             ))}

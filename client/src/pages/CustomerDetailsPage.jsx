@@ -1,5 +1,7 @@
 import { useState } from "react";
 import { useCustomerDetails } from "../hooks/customerDetails-hooks/customerDetails";
+import { useEffect } from "react";
+import { useSearchParams } from "react-router-dom";
 
 // Components
 import Sidebar from "../components/Sidebar";
@@ -20,12 +22,19 @@ import { GrOptimize } from "react-icons/gr";
 
 export default function CustomerDetailsPage() {
   // State hooks
+  const [searchParams] = useSearchParams();
+
   const [customerID, setCustomerID] = useState("");
   const { data, loading } = useCustomerDetails(customerID);
   const [currentPortfolio, setCurrentPortfolio] = useState("current");
   const { returnPercentage } = useGetReturnPercentage(customerID);
 
-  console.log("returnPercentage", returnPercentage);
+  useEffect(() => {
+    const customerID = searchParams.get("customerID");
+    if (customerID) {
+      setCustomerID(customerID);
+    }
+  }, [searchParams]);
 
   return (
     <div className="flex h-screen bg-gray-900 text-gray-200">
@@ -90,7 +99,7 @@ export default function CustomerDetailsPage() {
               className="rounded-2xl flex-grow mb-2"
               style={{ backgroundColor: "#1D283A" }}
             >
-              <RecommendationProduct customerID={customerID} />
+              {/* <RecommendationProduct customerID={customerID} /> */}
             </div>
           </div>
 
