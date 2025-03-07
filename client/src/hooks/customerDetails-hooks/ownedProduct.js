@@ -8,6 +8,11 @@ const useOwnedProduct = (customerID) => {
 
   useEffect(() => {
     const fetchData = async () => {
+      if (!customerID) {
+        setLoading(true); // Keep loading if no customerID
+        return;
+      }
+
       try {
         const data = await fetchOwnedProduct(customerID);
         setOwnedProduct(data);

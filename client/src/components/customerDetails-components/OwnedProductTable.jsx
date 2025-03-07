@@ -5,11 +5,19 @@ const OwnedProductTable = ({ customerID }) => {
   const { ownedProduct, loading, error } = useOwnedProduct(customerID);
 
   if (loading) {
-    return <div>Loading owned product data...</div>;
+    return (
+      <div className="flex items-center justify-center h-full">
+        Loading owned product data...
+      </div>
+    );
   }
 
   if (error) {
-    return <div>Error loading owned product data: {error.message}</div>;
+    return (
+      <div className="flex items-center justify-center h-full">
+        Error loading owned product data: {error.message}
+      </div>
+    );
   }
 
   return (
